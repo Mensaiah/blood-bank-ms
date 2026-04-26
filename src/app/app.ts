@@ -10,6 +10,10 @@ import config from "../config";
 import router from "../routes";
 import fileUpload from "express-fileupload";
 import mongoSanitize from "express-mongo-sanitize";
+import path from "path";
+import { rateLimit } from 'express-rate-limit'
+
+import cookieParser from  "cookie-parser"
 dotenv.config();
 
 const app = express();
@@ -23,6 +27,31 @@ app.use(
     useTempFiles: true,
     tempFileDir: "/tmp/",
   })
+);
+app.use(cookieParser())
+
+const limiter = rateLimit({
+	windowMs: 15 * 60 * 1000, 
+	limit: 1000, 
+	standardHeaders: 'draft-8', 
+	legacyHeaders: false, 
+
+})
+
+// Apply the rate limiting middleware to all requests.
+app.use(limiter)
+
+
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "../views"));
+
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "../public"), {
+  maxAge: '30d'
+}), 
+ 
 );
 
 app.use(mongoSanitize());
@@ -54,11 +83,16 @@ app.use(UtilsMiddleware.setDefaultsForGET);
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.get("/", (req, res) => {
-  res.send("App running");
+
+
+app.use("/", router);
+
+
+
+app.get("/",  (req: Request, res: Response) => {
+  res.render("pages/index");
 });
 
-app.use("/v1", router);
 
 app.use("*", (req, res) => {
   Logger.warn(`404 Not Found - ${req.originalUrl}`);

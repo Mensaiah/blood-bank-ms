@@ -1,0 +1,61 @@
+<header>
+    <div id="sticky-header" class="menu-area transparent-header">
+      <div class="container custom-container">
+        <div class="row">
+          <div class="col-12">
+           
+            <div class="menu-wrap">
+              <nav class="menu-nav show">
+                <div class="logo">
+                  <a href="/">
+                    <img src="https://9jamovieplus-files.s3.us-east-1.amazonaws.com/9JA_MOVIE_PLUS_LOGO-removebg-preview.png" alt="Logo"
+                    width="100"
+                    height="30"
+                    />
+                  </a>
+                </div>
+                
+                <div class="header-search">
+
+              <div class="form">
+                <input type="text" name='searchText' hx-target=".suggestions" placeholder="Find Favorite Movie"
+                hx-get="/api/movies/search"
+                hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+                />
+              </div>
+                
+                   
+                   
+                </form>
+
+                <div class="suggestions">
+                    
+                    
+                </div>
+                    </div>
+
+         
+
+              
+              </nav>
+            </div>
+          
+
+         
+           
+            <div class="modal fade" id="search-modal" tabIndex={-1} role="dialog" aria-hidden="true">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <form>
+                    <input type="text" placeholder="Search here..." />
+                    <button><i class="fas fa-search" ></i></button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>

@@ -1,13 +1,15 @@
 import { Router } from "express";
 import "express-async-errors"
 
-import authsRoutes from '../modules/auth/routes';
+import apiRoutes from './api';
+import viewRoutes from './view';
 
-import UserMiddleware from "../middlewares/user";
 
 const router = Router();
 
-router.use("/auth", authsRoutes);
+router.use("/api", apiRoutes);
+router.use("/", viewRoutes);
+
 
 // router.use("/", homeRoutes)
 
