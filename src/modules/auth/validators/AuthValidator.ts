@@ -28,14 +28,13 @@ export default class AuthValidator {
         const schema = Joi.object({
             firstName: Joi.string().max(50).required(),
             lastName: Joi.string().max(50).required(),
-            phoneNumber:Joi.string().required(),
             email: Joi.string().email().required(),
             password: Joi.string()
             .min(8)
             .pattern(passwordRegex)
             .message(
               '"password" must be at least 6 characters long and contain at least one uppercase letter, one lowercase letter and  one number'
-            )
+            ).required(),
         });
 
         const { error } = schema.validate(data);

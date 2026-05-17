@@ -11,6 +11,8 @@ export default class AuthController {
     public static async signup(req: Request, res: Response) {
 
         const validationError = AuthValidator.signup(req.body);
+        console.log('validationError:', validationError)
+
         if (validationError) {
             return StandardResponse.errorResponse(res, validationError, 422)
         }
@@ -29,9 +31,14 @@ export default class AuthController {
     
 
     public static async login(req: Request, res: Response) {
+        const isHtmxRequest = req.get("HX-Request") === "true";
 
         const validationError = AuthValidator.login(req.body);
         if (validationError) {
+            if (isHtmxRequest) {
+                return res.status(422).send(`<div>${validationError}</div>`);
+            }
+
             return StandardResponse.errorResponse(res, validationError, 422)
         }
 
@@ -39,10 +46,33 @@ export default class AuthController {
         const { data, error } = await AuthService.login(req.body);
 
         if (error) {
+            if (isHtmxRequest) {
+                return res.status(400).send(`<div>${error}</div>`);
+            }
+
             return StandardResponse.errorResponse(res, error, 400) 
             
         }
 
+
+        if (isHtmxRequest) {
+            if (data?.accessToken) {
+                res.cookie("accessToken", data.accessToken, {
+                    httpOnly: true,
+                    sameSite: "lax",
+                });
+            }
+
+            if (data?.refreshToken) {
+                res.cookie("refreshToken", data.refreshToken, {
+                    httpOnly: true,
+                    sameSite: "lax",
+                });
+            }
+
+            res.setHeader("HX-Redirect", "/");
+            return res.status(200).send("");
+        }
 
         return StandardResponse.successResponse(res, "Login Successful", data, 200)
     }

@@ -30,16 +30,7 @@ app.use(
 );
 app.use(cookieParser())
 
-const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, 
-	limit: 1000, 
-	standardHeaders: 'draft-8', 
-	legacyHeaders: false, 
 
-})
-
-// Apply the rate limiting middleware to all requests.
-app.use(limiter)
 
 
 app.set("view engine", "ejs");
@@ -48,9 +39,9 @@ app.set("views", path.join(__dirname, "../views"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(express.static(path.join(__dirname, "../public"), {
-//   maxAge: '30d'
-// }), );
+app.use(express.static(path.join(__dirname, "../public"), {
+  // maxAge: '30d'
+}));
 
 app.use(mongoSanitize());
 
@@ -88,7 +79,14 @@ app.use("/", router);
 
 
 app.get("/",  (req: Request, res: Response) => {
-  res.render("pages/index");
+  res.render("pages/index", {
+    page: {
+      title: "Blood Bank Management System",
+      author: "Blood Bank Management System",
+      image: "",
+      keywords: "blood bank, blood donation, blood units, inventory",
+    },
+  });
 });
 
 

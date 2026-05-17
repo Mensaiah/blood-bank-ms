@@ -71,7 +71,7 @@ export default class AuthService {
 
 
 
-            const tokenPayload = { id: newUser.id, type: UserType.USER, };
+            const tokenPayload = { id: newUser.id, type: UserType.ADMIN, };
             // const createdUser = await UserService.getUserById(newUser.id)
 
             const { token: accessToken, expiryAt } = this.generateToken(tokenPayload, '2d');

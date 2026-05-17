@@ -14,7 +14,10 @@ export enum UserStatus {
 
 export enum UserType {
     USER = 'USER',
-    TOUR_GUIDE = 'TOUR_GUIDE'
+    ADMIN = 'ADMIN',
+    HOSPITAL_REP = 'HOSPITAL_REP',
+    LAB_REP = 'LAB_REP',
+    
    
 }
 
