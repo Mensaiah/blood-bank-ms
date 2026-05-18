@@ -12,4 +12,10 @@ export default {
     env: process.env.NODE_ENV,
     defaultPushNotificationProvider: "firebase",
     redisUrl: process.env.REDIS_URL as string,
+    cloudinary: {
+        cloudName: process.env.CLOUDINARY_CLOUD_NAME as string,
+        apiKey: process.env.CLOUDINARY_API_KEY as string,
+        apiSecret: process.env.CLOUDINARY_API_SECRET as string,
+        folder: "blood-bank-ms"
+    }
 }

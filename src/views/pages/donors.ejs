@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head'); %>
+
+  <body>
+    <main class="hp-bg-color-dark-90 d-flex min-vh-100">
+      <%- include('../partials/sidebar'); %>
+
+        <div class="hp-main-layout">
+          <%- include('../partials/top-navigation'); %>
+
+
+            <div class="hp-main-layout-content">
+              <!-- Search Input with HTMX -->
+              <div class="row mb-32">
+                <div class="col-12 col-md-8">
+                  <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Donors</h1>
+
+
+                  <%- include('../partials/breadcrumb', { breadcrumbs: breadcrumbs }) %>
+
+
+
+
+                </div>
+
+              </div>
+              <input type="text" class="form-control mb-16" placeholder="Search For Donors"
+                hx-get="/api/donations/donors" hx-trigger="keyup changed delay:500ms" hx-target="#donor-list-container"
+                hx-swap="innerHTML" hx-include="[name='search']" name="searchText" aria-label="Search..">
+
+
+              <!-- Donor List Container (HTMX will replace this) -->
+              <div id="donor-list-container" hx-get="/api/donations/donors" hx-trigger="load" hx-swap="innerHTML">
+                <!-- Placeholder while loading -->
+                <div class="row g-12">
+                  <% for (let i=0; i < 10; i++) { %>
+                    <div class="col-12 col-md-6 col-lg-4">
+                      <div class="card h-100">
+                        <div class="placeholder-wave">
+                          <span class="placeholder col-12" style="height: 200px;"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <% } %>
+                </div>
+              </div>
+
+              <a href="/donors/add"
+                class="btn btn-ghost btn-primary position-fixed rounded-circle d-flex align-items-center justify-content-center shadow"
+                style="right: 24px; bottom: 24px; width: 56px; height: 56px; z-index: 1050;" aria-label="Add donor">
+                <span style="font-size: 28px; line-height: 1;">+</span>
+              </a>
+            </div>
+        </div>
+    </main>
+
+  </body>
+  <%- include('../partials/bottom'); %>
+
+</html>

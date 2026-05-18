@@ -11,6 +11,13 @@ type DashboardCard = {
   value: number;
 };
 
+type MenuItem = {
+  name: string;
+  path: string;
+  icon?: string;
+  children?: MenuItem[];
+};
+
 export default class DashboardService {
   public static async getCards() {
     const now = new Date();
@@ -38,5 +45,44 @@ export default class DashboardService {
     ];
 
     return cards;
+  }
+
+  public static getMenuItems(): MenuItem[] {
+    const menuItems: MenuItem[] = [
+      {
+        name: "Dashboard",
+        path: "/",
+        icon: "ri-dashboard-line",
+        },
+            {
+            name: "Donors",
+            path: "/donors",
+            icon: "ri-user-heart-line"
+        },
+         {
+            name: "Blood Units",
+            path: "/blood-units",
+            icon: "ri-droplet-fill"
+        },
+    
+        {
+            name: "Requests",
+            path: "/requests",
+            icon: "ri-file-list-line"
+        },
+     
+      {
+        name: "Notifications",
+        path: "/notifications",
+        icon: "ri-notification-line",
+      },
+      {
+        name: "Users",
+        path: "/users",
+        icon: "ri-user-line",
+      },
+    ];
+
+    return menuItems;
   }
 }

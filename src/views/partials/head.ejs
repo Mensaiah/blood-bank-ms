@@ -3,51 +3,75 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <meta name="author" content="Isaiah">
-    <meta name="description" content="Responsive, Highly Customizable Dashboard Template" />
+    <meta name="author" content="<%= (page && page.author) ? page.author : 'Isaiah' %>">
+    <meta name="description"
+        content="<%= (page && page.description) ? page.description : 'Responsive, Highly Customizable Dashboard ' %>" />
+    <meta name="keywords" content="<%= (page && page.keywords) ? page.keywords : '' %>">
 
     <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
-    <link rel="manifest" href="./favicon/site.webmanifest">
-    <link rel="mask-icon" href="./favicon/safari-pinned-tab.svg" color="#0010f7">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/logo.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+    <link rel="mask-icon" href="/img/logo.png" color="#0010f7">
     <meta name="msapplication-TileColor" content="#0010f7">
     <meta name="theme-color" content="#ffffff">
 
     <!-- Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
 
     <!-- Plugin -->
-    <link rel="stylesheet" type="text/css" href="./css/plugin/swiper-bundle.min.css">
-    <link rel="stylesheet" type="text/css" href="./icons/iconly/index.min.css">
-    <link rel="stylesheet" type="text/css" href="./icons/remix-icon/index.min.css">
-    <link rel="stylesheet" type="text/css" href="./css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="./css/colors.css">
+    <link rel="stylesheet" type="text/css" href="/css/plugin/swiper-bundle.min.css">
+    <link rel="stylesheet" type="text/css" href="/icons/iconly/index.min.css">
+    <link rel="stylesheet" type="text/css" href="/icons/remix-icon/index.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/css/colors.css">
 
     <!-- Base -->
-    <link rel="stylesheet" type="text/css" href="./css/base/typography.css">
-    <link rel="stylesheet" type="text/css" href="./css/base/base.css">
+    <link rel="stylesheet" type="text/css" href="/css/base/typography.css">
+    <link rel="stylesheet" type="text/css" href="/css/base/base.css">
 
     <!-- Theme -->
-    <link rel="stylesheet" type="text/css" href="./css/theme/colors-dark.css">
-    <link rel="stylesheet" type="text/css" href="./css/theme/theme-dark.css">
-    <link rel="stylesheet" type="text/css" href="./css/custom-rtl.css">
+    <link rel="stylesheet" type="text/css" href="/css/theme/colors-dark.css">
+    <link rel="stylesheet" type="text/css" href="/css/theme/theme-dark.css">
+    <link rel="stylesheet" type="text/css" href="/css/custom-rtl.css">
 
     <!-- Layouts -->
-    <link rel="stylesheet" type="text/css" href="./css/layouts/sider.css">
-    <link rel="stylesheet" type="text/css" href="./css/layouts/header.css">
-    <link rel="stylesheet" type="text/css" href="./css/layouts/page-content.css">
-    <link rel="stylesheet" type="text/css" href="./css/components.css">
+    <link rel="stylesheet" type="text/css" href="/css/layouts/sider.css">
+    <link rel="stylesheet" type="text/css" href="/css/layouts/header.css">
+    <link rel="stylesheet" type="text/css" href="/css/layouts/page-content.css">
+    <link rel="stylesheet" type="text/css" href="/css/components.css">
 
     <!-- Pages -->
-    <link rel="stylesheet" type="text/css" href="./css/pages/authentication.css">
+    <link rel="stylesheet" type="text/css" href="/css/pages/authentication.css">
 
     <!-- Custom -->
-    <link rel="stylesheet" type="text/css" href=".assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 
-     <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
-     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+    <% if (page && Array.isArray(page.styles)) { %>
+        <% page.styles.forEach(function (s) { %>
+            <link rel="stylesheet" href="<%= s %>">
+            <% }) %>
+                <% } %>
 
-    <title>Login - Yoda Admin Html Template</title>
+                    <script src="https://unpkg.com/hyperscript.org@0.9.14"></script>
+                    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+
+                    <% if (page && Array.isArray(page.headScripts)) { %>
+                        <% page.headScripts.forEach(function (s) { %>
+                            <script src="<%= s %>"></script>
+                            <% }) %>
+                                <% } %>
+
+                                    <!-- Open Graph / Social -->
+                                    <meta property="og:title"
+                                        content="<%= (page && page.title) ? page.title : 'Blood Bank MS' %>">
+                                    <meta property="og:description"
+                                        content="<%= (page && page.description) ? page.description : '' %>">
+                                    <meta property="og:image" content="<%= (page && page.image) ? page.image : '' %>">
+
+                                    <title>
+                                        <%= (page && page.title) ? page.title : 'Blood Bank MS' %>
+                                    </title>
 </head>

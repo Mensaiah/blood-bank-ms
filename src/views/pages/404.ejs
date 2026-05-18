@@ -1,21 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
 <%- include('../partials/head'); %>
+  <title>404 | Blood Bank MS</title>
 
   <body>
+    <div class="row text-center overflow-hidden min-vh-100">
+      <div class="position-absolute w-100 h-100" style="top: 0; left: 0; z-index: -1;">
+        <svg width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg" class="hp-stroke-color-dark-90">
+          <path
+            d="M3574 1540L907.175 -134.641L1053.03 429.011L387.731 -53.7583L937.881 929.474L32.0529 297.577L254.672 889.032L-2135.09 -460"
+            stroke="#F7FAFC" stroke-width="100" stroke-linejoin="bevel"></path>
+        </svg>
+      </div>
 
+      <div class="d-flex align-items-center justify-content-center border-bottom hp-border-color-dark-60 py-16 col-12">
+        <div class="hp-header-logo d-flex align-items-center">
+          <a href="/" class="position-relative">
+            <img class="hp-logo hp-sidebar-hidden hp-dir-none hp-dark-none" src="./img/logo.png" alt="logo">
+          </a>
+        </div>
+      </div>
 
-    <%- include('../partials/header'); %>
+      <div class="hp-error-content py-32 col-12">
+        <div class="row h-100 align-items-center justify-content-center">
+          <div class="col">
+            <h1 class="hp-error-content-title fw-light hp-text-color-black-bg hp-text-color-dark-0 mb-0">404</h1>
+            <h2 class="h1 mb-16">Oops, page not found!</h2>
+            <p class="mb-32 hp-p1-body hp-text-color-black-100 hp-text-color-dark-0">The page you requested does not
+              exist.</p>
 
-      <main>
+            <a href="/" class="btn btn-primary">
+              <span>Back to Home</span>
+            </a>
+          </div>
+        </div>
+      </div>
 
-        <h1>Page Not Found</h1>
-      </main>
-       <button
-      name='scroll to top'
-      class="scroll-top scroll-to-target" data-target="html">
-      <i class="fas fa-angle-up"></i>
-    </button>
+      <div class="py-32 col-12">
+        <p class="mb-8 hp-p1-body hp-text-color-black-60">COPYRIGHT ©2026 Blood Bank MS, All rights reserved</p>
+      </div>
+    </div>
 
 
   </body>

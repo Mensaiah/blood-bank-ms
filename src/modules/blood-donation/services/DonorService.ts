@@ -24,7 +24,10 @@ export default class DonorService {
   }
 
   public static async getDonorById(id: string) {
-    return DonorRepository.findById(id);
+    return DonorRepository.findOne({
+      
+      $or: [{ _id: id }, { donationId: id }],
+    });
   }
 
   public static async createDonor(input: IAddDonor) {

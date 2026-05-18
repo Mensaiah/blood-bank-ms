@@ -7,6 +7,11 @@ export default class DonorController {
   public static async getAll(req: Request, res: Response) {
     const query = req.query as any;
     const donors = await DonorService.getDonors(query);
+    
+    if (req.get("HX-Request") === "true") {
+      return res.render("partials/donor-list", { donors: Array.isArray(donors) ? donors : donors.docs || [] });
+    }
+    
     return StandardResponse.successResponse(res, "Donors fetched", donors, 200);
   }
 
@@ -43,11 +48,7 @@ export default class DonorController {
       return StandardResponse.errorResponse(res, validationError, 422);
     }
 
-    const { data, error } = await DonorService.updateDonor(id as unknown as string, input);
-    if (error) {
-      return StandardResponse.errorResponse(res, error, 400);
-    }
-
+    await DonorService.updateDonor(id as unknown as string, input);
     return StandardResponse.successResponse(res, "Donor updated", {}, 200);
   }
 }

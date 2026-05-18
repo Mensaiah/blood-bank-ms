@@ -1,0 +1,146 @@
+<% const donorData=typeof donor !=='undefined' ? donor : {}; const donorFormAction=typeof formAction !=='undefined' ?
+    formAction : '/api/donations/donors' ; const donorFormMethod=typeof formMethod !=='undefined' ? formMethod : 'post'
+    ; const donorFormSubmitLabel=typeof submitLabel !=='undefined' ? submitLabel : (donorData && (donorData.id ||
+    donorData._id) ? 'Update Donor' : 'Save Donor' ); const donorId=donorData.donationId || donorData.id || '' ; const
+    dateOfBirthValue=donorData.dateOfBirth ? new Date(donorData.dateOfBirth).toISOString().slice(0, 10) : '' ; %>
+
+    <form action="<%= donorFormAction %>" method="<%= donorFormMethod %>" class="row g-24">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-24">
+                    <div class="d-flex align-items-center justify-content-between mb-24">
+                        <div>
+                            <h4 class="mb-4">Donor Information</h4>
+                            <p class="mb-0 hp-text-color-black-80">Core donor details and blood group.</p>
+                        </div>
+
+                        <% if (donorId) { %>
+                            <span class="badge bg-primary">ID: <%= donorId %></span>
+                            <% } %>
+                    </div>
+
+                    <div class="row g-16">
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="name">Full Name</label>
+                            <input class="form-control" type="text" id="name" name="name"
+                                value="<%= donorData.name || '' %>" placeholder="Enter donor name" required>
+                        </div>
+
+                        <div class="col-12 col-md-3">
+                            <label class="form-label" for="gender">Gender</label>
+                            <select class="form-select" id="gender" name="gender">
+                                <option value="">Select gender</option>
+                                <option value="Male" <%=donorData.gender==='Male' ? 'selected' : '' %>>Male</option>
+                                <option value="Female" <%=donorData.gender==='Female' ? 'selected' : '' %>>Female
+                                </option>
+                                <option value="Other" <%=donorData.gender==='Other' ? 'selected' : '' %>>Other</option>
+                                <option value="Prefer not to say" <%=donorData.gender==='Prefer not to say' ? 'selected'
+                                    : '' %>>Prefer not to say</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 col-md-3">
+                            <label class="form-label" for="dateOfBirth">Date of Birth</label>
+                            <input class="form-control" type="date" id="dateOfBirth" name="dateOfBirth"
+                                value="<%= dateOfBirthValue %>">
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="phoneNumber">Phone Number</label>
+                            <input class="form-control" type="text" id="phoneNumber" name="phoneNumber"
+                                value="<%= donorData.phoneNumber || '' %>" placeholder="Enter phone number" required>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="email">Email</label>
+                            <input class="form-control" type="email" id="email" name="email"
+                                value="<%= donorData.email || '' %>" placeholder="Enter email address">
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="occupation">Occupation</label>
+                            <input class="form-control" type="text" id="occupation" name="occupation"
+                                value="<%= donorData.occupation || '' %>" placeholder="Enter occupation">
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <label class="form-label" for="bloodGroup">Blood Group</label>
+                            <select class="form-select" id="bloodGroup" name="bloodGroup" required>
+                                <option value="">Select blood group</option>
+                                <% ['A+', 'A-' , 'B+' , 'B-' , 'AB+' , 'AB-' , 'O+' , 'O-' ].forEach(function (group) {
+                                    %>
+                                    <option value="<%= group %>" <%=donorData.bloodGroup===group ? 'selected' : '' %>>
+                                        <%= group %>
+                                    </option>
+                                    <% }); %>
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label" for="donorImage">Donor Photo</label>
+                            <div class="input-group mb-24">
+                                <input type="file" class="form-control" id="donorImage" accept="image/*" required>
+                                <label class="input-group-text" for="donorImage">Upload</label>
+                            </div>
+                            <input type="hidden" id="image" name="image" value="<%= donorData.image || '' %>">
+                            <div id="imagePreview" class="mt-16" style="display: none;">
+                                <small class="d-block mb-8">Preview:</small>
+                                <img src="" alt="Preview"
+                                    style="max-width: 200px; max-height: 200px; border-radius: 8px;">
+                            </div>
+                            <div id="uploadStatus" style="display: none;" class="mt-8">
+                                <div class="spinner-border spinner-border-sm" style="display: none; margin-right: 8px;">
+                                    <span class="visually-hidden">Uploading...</span>
+                                </div>
+                                <small id="statusText"></small>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label" for="address">Address</label>
+                            <textarea class="form-control" id="address" name="address" rows="3"
+                                placeholder="Enter donor address"><%= donorData.address || '' %></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-24">
+                    <h4 class="mb-4">Next of Kin</h4>
+                    <p class="mb-24 hp-text-color-black-80">Add an emergency contact for the donor.</p>
+
+                    <div class="row g-16">
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="nextOfKinName">Next of Kin Name</label>
+                            <input class="form-control" type="text" id="nextOfKinName" name="nextOfKinName"
+                                value="<%= donorData.nextOfKinName || '' %>" placeholder="Enter next of kin name">
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="nextOfKinRelationship">Relationship</label>
+                            <input class="form-control" type="text" id="nextOfKinRelationship"
+                                name="nextOfKinRelationship" value="<%= donorData.nextOfKinRelationship || '' %>"
+                                placeholder="e.g. Brother">
+                        </div>
+
+                        <div class="col-12 col-md-4">
+                            <label class="form-label" for="nextOfKinPhoneNumber">Next of Kin Phone</label>
+                            <input class="form-control" type="text" id="nextOfKinPhoneNumber"
+                                name="nextOfKinPhoneNumber" value="<%= donorData.nextOfKinPhoneNumber || '' %>"
+                                placeholder="Enter phone number">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 d-flex justify-content-end gap-12">
+            <a href="/donors" class="btn btn-outline-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">
+                <%= donorFormSubmitLabel %>
+            </button>
+        </div>
+    </form>

@@ -1,0 +1,94 @@
+<% if (donors && donors.length> 0) { %>
+    <div class="row g-12">
+        <% donors.forEach((donor)=> { %>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card h-100">
+                    <div class="row g-0 h-100">
+                        <!-- Donor Image -->
+                        <div class="col-md-6">
+                            <% if (donor.image) { %>
+                                <img src="<%= donor.image %>" alt="<%= donor.name %>" class="rounded-start hp-img-cover"
+                                    height="100%">
+                                <% } else { %>
+                                    <div class="bg-light d-flex align-items-center justify-content-center rounded-start"
+                                        style="height: 100%; min-height: 150px;">
+                                        <i class="ri-user-line" style="font-size: 48px; color: #ccc;"></i>
+                                    </div>
+                                    <% } %>
+                        </div>
+
+                        <!-- Donor Info -->
+                        <div class="col-md-6">
+                            <div class="card-body d-flex flex-column h-100">
+                                <!-- Donor ID -->
+                                <small class="text-muted d-block mb-4">
+                                    ID: <strong>
+                                        <%= donor.donationId %>
+                                    </strong>
+                                </small>
+
+                                <!-- Title: Donor Name -->
+                                <h5 class="card-title mb-8">
+                                    <a href="/donors/<%= donor.id || donor._id %>"
+                                        class="text-decoration-none text-dark">
+                                        <%= donor.name %>
+                                    </a>
+                                </h5>
+
+                                <!-- Blood Group Badge -->
+                                <div class="mb-8">
+                                    <span class="badge bg-success-4">
+                                        <i class="ri-droplet-fill"></i>
+                                        <%= donor.bloodGroup %>
+                                    </span>
+                                </div>
+
+                                <!-- Donations Count -->
+                                <p class="card-text hp-p1-body mb-8">
+                                    <strong>Donations:</strong>
+                                    <%= donor.donationCount || 0 %>
+                                </p>
+
+                                <!-- Eligibility Status -->
+                                <div class="mt-auto">
+                                    <% const isEligible=donor.isEligible !==false && (!donor.lastDonated || new
+                                        Date(donor.lastDonated) < new Date(Date.now() - 56 * 24 * 60 * 60 * 1000)); %>
+                                        <% if (isEligible) { %>
+                                            <span class="badge bg-success">
+                                                <i class="ri-check-line"></i>
+                                                Eligible
+                                            </span>
+                                            <% } else { %>
+                                                <span class="badge bg-warning text-dark">
+                                                    <i class="ri-time-line"></i>
+                                                    Not Eligible
+                                                </span>
+                                                <% } %>
+                                </div>
+
+                                <div class="mt-12">
+                                    <a href="/donors/<%= donor.id || donor._id %>"
+                                        class="btn btn-outline-primary btn-sm w-100">
+                                        View Details
+                                    </a>
+                                </div>
+
+                                <!-- Last Donated -->
+                                <% if (donor.lastDonated) { %>
+                                    <small class="text-muted d-block mt-8">
+                                        Last donated: <%= new Date(donor.lastDonated).toLocaleDateString() %>
+                                    </small>
+                                    <% } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+    </div>
+    <% } else { %>
+        <div class="alert alert-info" role="alert">
+            <i class="ri-info-line"></i>
+            No donors found. Try adjusting your search criteria.
+        </div>
+        <% } %>

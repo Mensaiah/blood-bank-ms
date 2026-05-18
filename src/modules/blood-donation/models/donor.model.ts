@@ -12,6 +12,13 @@ const DonorSchema = new mongoose.Schema(
     image: { type: String },
     phoneNumber: { type: String, required: true, index: true },
     email: { type: String, required: false, index: true },
+    gender: { type: String },
+    dateOfBirth: { type: Date },
+    address: { type: String },
+    occupation: { type: String },
+    nextOfKinName: { type: String },
+    nextOfKinRelationship: { type: String },
+    nextOfKinPhoneNumber: { type: String },
     lastDonated: { type: Date },
     bloodGroup: {
 
@@ -34,7 +41,7 @@ const DonorSchema = new mongoose.Schema(
   }
 );
 
-DonorSchema.index({ name: "text", bloodGroup: "text" });
+DonorSchema.index({ name: "text", bloodGroup: "text", occupation: "text", address: "text" });
 
 // Add donationId on creation
 DonorSchema.pre("validate", function (next) {

@@ -10,9 +10,17 @@ export default class UserMiddleware {
                 const authorization = req.headers.authorization
                 const cookieToken = req.cookies?.accessToken;
                 const bearerToken = authorization?.startsWith("Bearer") ? authorization.split(" ")[1] : null;
-                const token = bearerToken || cookieToken;
+        const token = bearerToken || cookieToken;
         
-                if (!token) {
+
+        const isHtmxRequest = req.get("HX-Request") === "true";
+        
+        if (!token) {
+
+            if (isHtmxRequest) {
+                return res.redirect("/login");
+            }
+                    
             return StandardResponse.errorResponse(res, "Invalid Token Provided", 401, StandardReponseCode.INVALID_AUTH_TOKEN)
         }
     

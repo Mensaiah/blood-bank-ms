@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head'); %>
+    <title>
+        <%= page && page.title ? page.title : 'Blood Bank Management System' %>
+    </title>
+
+    <body>
+        <main class="hp-bg-color-dark-90 d-flex min-vh-100">
+            <%- include('../partials/sidebar'); %>
+
+                <div class="hp-main-layout">
+                    <%- include('../partials/top-navigation'); %>
+
+                        <div class="hp-main-layout-content">
+                            <div class="row mb-32">
+                                <div class="col-12 col-lg-10">
+                                    <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Edit Donor</h1>
+                                    <%- include('../partials/breadcrumb', { breadcrumbs: breadcrumbs }) %>
+                                </div>
+                            </div>
+
+                            <%- include('../partials/donor-form', { donor: donor, formAction: '/api/donations/donors/' +
+                                (donor.id || donor._id), formMethod: 'post' , submitLabel: 'Update Donor' }) %>
+                        </div>
+                </div>
+        </main>
+
+    </body>
+    <%- include('../partials/bottom'); %>
+        <script src="/js/donor-form.js"></script>
+
+</html>

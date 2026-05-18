@@ -1,0 +1,61 @@
+<% if (menuItems && menuItems.length> 0) { %>
+    <% menuItems.forEach((item)=> { %>
+        <li>
+            <% if (item.children && item.children.length> 0) { %>
+                <a href="javascript:;" class="submenu-item">
+                    <span>
+                        <% if (item.icon) { %>
+                            <span class="submenu-item-icon">
+                                <i class="<%= item.icon %>"></i>
+                            </span>
+                            <% } %>
+                                <span>
+                                    <%= item.name %>
+                                </span>
+                    </span>
+
+                    <div class="menu-arrow"></div>
+                </a>
+
+                <ul class="submenu-children" data-level="1" style="display: none;">
+                    <% item.children.forEach((child)=> { %>
+                        <li>
+                            <a href="<%= child.path %>">
+                                <% if (child.icon) { %>
+                                    <span class="submenu-item-icon">
+                                        <i class="<%= child.icon %>"></i>
+                                    </span>
+                                    <% } %>
+
+                                        <span>
+                                            <%= child.name %>
+                                        </span>
+                            </a>
+                        </li>
+                        <% }); %>
+                </ul>
+                <% } else { %>
+                    <a href="<%= item.path %>">
+                        <% if (item.icon) { %>
+                            <div class="tooltip-item in-active" data-bs-toggle="tooltip" data-bs-placement="right"
+                                title="" data-bs-original-title="<%= item.name %>" aria-label="<%= item.name %>"></div>
+
+                            <span>
+                                <span class="submenu-item-icon">
+                                    <i class="<%= item.icon %>"></i>
+                                </span>
+
+                                <span>
+                                    <%= item.name %>
+                                </span>
+                            </span>
+                            <% } else { %>
+                                <span>
+                                    <%= item.name %>
+                                </span>
+                                <% } %>
+                    </a>
+                    <% } %>
+        </li>
+        <% }); %>
+            <% } %>

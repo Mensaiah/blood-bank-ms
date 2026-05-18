@@ -12,4 +12,14 @@ export default class DashboardController {
 
     return StandardResponse.successResponse(res, "Dashboard cards fetched", cards as any, 200);
   }
+
+  public static async getMenu(req: Request, res: Response) {
+    const menuItems = DashboardService.getMenuItems();
+
+    if (req.get("HX-Request") === "true") {
+      return res.render("partials/sidebar-menu", { menuItems });
+    }
+
+    return StandardResponse.successResponse(res, "Menu items fetched", menuItems as any, 200);
+  }
 }

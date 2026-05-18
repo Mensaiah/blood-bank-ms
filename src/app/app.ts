@@ -11,7 +11,6 @@ import router from "../routes";
 import fileUpload from "express-fileupload";
 import mongoSanitize from "express-mongo-sanitize";
 import path from "path";
-import { rateLimit } from 'express-rate-limit'
 
 import cookieParser from  "cookie-parser"
 dotenv.config();

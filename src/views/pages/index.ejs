@@ -3,25 +3,90 @@
 <%- include('../partials/head'); %>
 
   <body>
+    <main class="hp-bg-color-dark-90 d-flex min-vh-100">
+      <%- include('../partials/sidebar'); %>
 
+        <div class="hp-main-layout">
+           <%- include('../partials/top-navigation'); %> 
 
-    <%- include('../partials/header'); %>
+            <div class="hp-main-layout-content">
+              <div class="row justify-content-center">
+                <div class="col-12">
+                  <div
+                    class=" py-32 py-sm-64 px-24 px-sm-48 px-md-80 position-relative overflow-hidden hp-page-content"
+                    style="border-radius: 32px;">
+                    <div class="row mb-32">
+                      <div class="col-12 col-md-8">
+                        <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Welcome</h1>
+                        <p class="hp-p1-body mb-0 hp-text-color-black-80 hp-text-color-dark-30">This page uses reusable
+                          vertical layout partials and form components from the templates.</p>
+                      </div>
+                    </div>
 
-      <main>
-        <%- include('../partials/breadcrumbs'); %>
-          <%- include('../partials/movie-area'); %>
+                    <div class="row g-32">
+                      <div class="col-12 col-lg-6">
+                        <div class="card hp-card-1 border-black-40 hp-border-color-dark-80">
+                          <div class="card-body">
+                            <h4 class="mb-24 hp-text-color-black-100 hp-text-color-dark-0">Quick Donor Form</h4>
 
-      </main>
-      <%- include('../partials/footer'); %>
-       <button
-      name='scroll to top'
-      class="scroll-top scroll-to-target" data-target="html">
-      <i class="fas fa-angle-up"></i>
-    </button>
+                            <form>
+                              <div class="mb-16">
+                                <label for="donorName" class="form-label">Donor Name</label>
+                                <input type="text" class="form-control" id="donorName" placeholder="Enter donor name">
+                              </div>
 
+                              <div class="mb-16">
+                                <label for="bloodGroup" class="form-label">Blood Group</label>
+                                <select class="form-select" id="bloodGroup">
+                                  <option value="">Select blood group</option>
+                                  <option>A+</option>
+                                  <option>A-</option>
+                                  <option>B+</option>
+                                  <option>B-</option>
+                                  <option>AB+</option>
+                                  <option>AB-</option>
+                                  <option>O+</option>
+                                  <option>O-</option>
+                                </select>
+                              </div>
+
+                              <button type="button" class="btn btn-primary w-100">Save</button>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-12 col-lg-6">
+                        <div class="card hp-card-1 border-black-40 hp-border-color-dark-80">
+                          <div class="card-body">
+                            <h4 class="mb-24 hp-text-color-black-100 hp-text-color-dark-0">Inventory Snapshot</h4>
+
+                            <div class="d-flex align-items-center justify-content-between mb-16">
+                              <span class="hp-p1-body">Available Units</span>
+                              <span class="badge bg-success">0</span>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between mb-16">
+                              <span class="hp-p1-body">Reserved Units</span>
+                              <span class="badge bg-warning text-dark">0</span>
+                            </div>
+
+                            <div class="d-flex align-items-center justify-content-between">
+                              <span class="hp-p1-body">Expired Units</span>
+                              <span class="badge bg-danger">0</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </main>
 
   </body>
-  <%- include('../partials/monetag'); %>
   <%- include('../partials/bottom'); %>
 
 

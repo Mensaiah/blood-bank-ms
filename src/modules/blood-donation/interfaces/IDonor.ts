@@ -7,6 +7,13 @@ export interface IDonor extends Document {
   phoneNumber: string;
   image?: string;
   email?: string;
+  gender?: string;
+  dateOfBirth?: Date;
+  address?: string;
+  occupation?: string;
+  nextOfKinName?: string;
+  nextOfKinRelationship?: string;
+  nextOfKinPhoneNumber?: string;
   lastDonated?: Date;
   bloodGroup: BloodGroup;
   createdAt?: Date;
@@ -18,6 +25,13 @@ export interface IAddDonor {
   phoneNumber: string;
   image?: string;
   email?: string;
+  gender?: string;
+  dateOfBirth?: Date;
+  address?: string;
+  occupation?: string;
+  nextOfKinName?: string;
+  nextOfKinRelationship?: string;
+  nextOfKinPhoneNumber?: string;
   bloodGroup: BloodGroup;
 }
 
