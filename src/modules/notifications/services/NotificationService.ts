@@ -101,11 +101,14 @@ export default class NotificationService {
     }
 
     const donorsData = audience === "DONOR"
-      ? [await DonorService.getDonorById(String(donorId))]
-      : await this.getAllDonors(bloodGroup);
-
+    ? [await DonorService.getDonorById(String(donorId))]
+    : await this.getAllDonors(bloodGroup);
+    
+    console.log('donorsData:', donorsData)
     const donors = donorsData.filter(Boolean) as any[];
+    console.log('donors:', donors)
     const logs: Array<Partial<INotificationLog>> = [];
+    console.log('logs:', logs)
 
     for (const donor of donors) {
       logs.push(await this.processDonorNotification(sentBy, input, donor, channel));
@@ -137,6 +140,7 @@ export default class NotificationService {
   ) {
     try {
       if (channel === "EMAIL") {
+        Logger.info(`Processing email notification for donor ${donor?._id} (${donor?.email})`);
         if (!donor?.email) {
           return this.buildLog(sentBy, input, donor, "SKIPPED", "Donor has no email");
         }
@@ -145,6 +149,7 @@ export default class NotificationService {
       }
 
       if (channel === "SMS") {
+        Logger.info(`Processing SMS notification for donor ${donor?._id} (${donor?.phoneNumber})`);
         if (!donor?.phoneNumber) {
           return this.buildLog(sentBy, input, donor, "SKIPPED", "Donor has no phone number");
         }
@@ -162,7 +167,9 @@ export default class NotificationService {
     const mailSubject = this.getEmailSubject(input, donor?.name || "Donor");
     const html = this.getEmailHtml(input, donor?.name || "Donor", mailSubject);
 
-    await this.emailService.sendRawMail({ to: donor.email, subject: mailSubject }, html);
+
+    const result = await this.emailService.sendRawMail({ to: donor.email, subject: mailSubject }, html);
+    console.log('Email send result:', result)
   }
 
   private getEmailSubject(input: ISendNotificationInput, donorName: string) {
@@ -190,14 +197,14 @@ export default class NotificationService {
   }
 
   private async getAllDonors(bloodGroup?: BloodGroup | "ALL") {
-    const donorsPage: any = await DonorService.getDonors({ page: 1, limit: 1000 } as any);
+    const donorsPage: any = await DonorService.getDonors({searchText:bloodGroup} as any);
     const donors = Array.isArray(donorsPage) ? donorsPage : (donorsPage?.docs || []);
 
     if (!bloodGroup || bloodGroup === "ALL") {
       return donors;
     }
 
-    return donors.filter((donor: any) => donor?.bloodGroup === bloodGroup);
+    return donors
   }
 
   private buildLog(

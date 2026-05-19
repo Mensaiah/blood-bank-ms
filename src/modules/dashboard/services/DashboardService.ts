@@ -81,11 +81,11 @@ export default class DashboardService {
         path: "/notifications",
         icon: "ri-notification-line",
       },
-      {
-        name: "Users",
-        path: "/users",
-        icon: "ri-user-line",
-      },
+      // {
+      //   name: "Users",
+      //   path: "/users",
+      //   icon: "ri-user-line",
+      // },
     ];
 
     return menuItems;

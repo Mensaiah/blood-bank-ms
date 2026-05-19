@@ -23,6 +23,8 @@ class NotificationController {
 
         const senderId = res.locals.user?.id;
         const { data, error } = await this.notificationService.sendNotification(senderId, req.body);
+        console.log('data:', data)
+        console.log('error:', error)
 
         if (error) {
             return StandardResponse.errorResponse(res, error, 400);
