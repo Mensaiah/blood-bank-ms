@@ -220,6 +220,168 @@ graph TB
 
 ---
 
+## 5) Detailed Module Component Diagram
+
+Shows the boundaries and interfaces of each major module with internal organization.
+
+```mermaid
+graph TB
+    subgraph "Auth Module"
+        AuthRoute["Routes:<br/>login, signup, refresh"]
+        AuthCtrl["AuthController"]
+        AuthSvc["AuthService"]
+        AuthRepo["AuthRepository"]
+        AuthValidator["AuthValidator"]
+    end
+    
+    subgraph "Donation Module"
+        DonRoute["Routes:<br/>create, list, detail"]
+        DonCtrl["DonationController"]
+        DonSvc["DonationService"]
+        DonRepo["DonationRepository"]
+        DonValidator["DonationValidator"]
+    end
+    
+    subgraph "Blood Unit Module"
+        BURoute["Routes:<br/>list, detail,<br/>status transition"]
+        BUCtrl["BloodUnitController"]
+        BUSvc["BloodUnitService"]
+        BURepo["BloodUnitRepository"]
+        BUValidator["BloodUnitValidator"]
+    end
+    
+    subgraph "Dashboard Module"
+        DBRoute["Routes:<br/>cards, menu"]
+        DBCtrl["DashboardController"]
+        DBSvc["DashboardService"]
+    end
+    
+    subgraph "Notification Module"
+        NRoute["Routes:<br/>send, history"]
+        NCtrl["NotificationController"]
+        NSvc["NotificationService"]
+        NRepo["NotificationRepository"]
+        NValidator["NotificationValidator"]
+        EmailSvc["EmailService"]
+        SMSSvc["SmsService"]
+    end
+    
+    subgraph "Files Module"
+        FRoute["Routes:<br/>upload, delete"]
+        FCtrl["FileController"]
+        FSvc["FileService"]
+    end
+    
+    subgraph "User Module"
+        UserRoute["Routes:<br/>profile, update"]
+        UserCtrl["UserController"]
+        UserSvc["UserService"]
+        UserRepo["UserRepository"]
+    end
+    
+    AuthRoute --> AuthCtrl --> AuthValidator
+    AuthCtrl --> AuthSvc --> AuthRepo
+    
+    DonRoute --> DonCtrl --> DonValidator
+    DonCtrl --> DonSvc --> DonRepo
+    DonSvc -->|Uses| BUSvc
+    
+    BURoute --> BUCtrl --> BUValidator
+    BUCtrl --> BUSvc --> BURepo
+    
+    DBRoute --> DBCtrl --> DBSvc
+    
+    NRoute --> NCtrl --> NValidator
+    NCtrl --> NSvc --> NRepo
+    NSvc --> EmailSvc
+    NSvc --> SMSSvc
+    NSvc -->|Queries| DonSvc
+    
+    FRoute --> FCtrl --> FSvc
+    
+    UserRoute --> UserCtrl --> UserSvc --> UserRepo
+    
+    AuthSvc -->|Interacts with| UserSvc
+    DBSvc -->|Queries| BUSvc
+    DBSvc -->|Queries| DonSvc
+    DBSvc -->|Queries| UserSvc
+```
+
+---
+
+## 6) Blood Unit State Diagram (Lifecycle)
+
+Shows all possible states and valid transitions for a blood unit.
+
+```mermaid
+stateDiagram-v2
+    [*] --> DONATED: Blood collected<br/>from donor
+    
+    DONATED --> TESTING: Unit sent to lab
+    DONATED --> QUARANTINED: Initial issues detected
+    
+    TESTING --> AVAILABLE: Tests pass,<br/>unit approved
+    TESTING --> QUARANTINED: Failed tests,<br/>unit held
+    TESTING --> DISCARDED: Fatal test failures
+    
+    QUARANTINED --> AVAILABLE: Investigation<br/>resolved, approved
+    QUARANTINED --> DISCARDED: Unable to<br/>resolve, discard
+    
+    AVAILABLE --> RESERVED: Hospital<br/>requests unit
+    AVAILABLE --> EXPIRED: Expiry date<br/>reached
+    AVAILABLE --> DISCARDED: Quality check<br/>failure
+    
+    RESERVED --> TRANSFUSED: Transfusion<br/>completed
+    RESERVED --> AVAILABLE: Reservation<br/>cancelled
+    RESERVED --> EXPIRED: Expires before<br/>transfusion
+    RESERVED --> DISCARDED: Damage during<br/>transport
+    
+    TRANSFUSED --> [*]: Unit<br/>consumed
+    EXPIRED --> [*]: Unit<br/>discarded
+    DISCARDED --> [*]: Unit<br/>destroyed
+    
+    note right of DONATED
+        Initial state after collection.
+        Awaiting lab testing.
+    end note
+    
+    note right of TESTING
+        Unit under quality assessment.
+        Results determine next state.
+    end note
+    
+    note right of AVAILABLE
+        Approved and ready for use.
+        Can be reserved or expired.
+    end note
+    
+    note right of RESERVED
+        Allocated to a hospital request.
+        Awaiting transfusion or return.
+    end note
+    
+    note right of QUARANTINED
+        Unit on hold pending review.
+        May be approved or discarded.
+    end note
+    
+    note right of TRANSFUSED
+        Final state: unit given to patient.
+    end note
+    
+    note right of EXPIRED
+        Expiry date reached.
+        Unit removed from circulation.
+    end note
+    
+    note right of DISCARDED
+        Unit cannot be used.
+        Removed safely.
+    end note
+```
+
+---
+
 ## Architecture Principles
 
 - **Layered Architecture**: Routes → Controllers → Services → Repositories → Models.
@@ -227,6 +389,7 @@ graph TB
 - **Transaction Support**: Critical multi-step operations (donations) use DB transactions.
 - **Separation of Concerns**: Domain logic in services, data access in repositories, HTTP concerns in controllers.
 - **External Integrations**: Email/SMS decoupled via services; file storage abstracted.
+- **State Management**: Blood unit lifecycle enforced via transitions; invalid transitions rejected by service layer.
 
 ---
 
