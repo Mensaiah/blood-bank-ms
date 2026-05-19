@@ -5,6 +5,7 @@ import authsRoutes from '../modules/auth/routes';
 import donationRoutes from '../modules/blood-donation/routes';
 import dashboardRoutes from '../modules/dashboard/routes';
 import filesRoutes from '../modules/files/routes';
+import notificationRoutes from '../modules/notifications/routes';
 
 import UserMiddleware from "../middlewares/user";
 
@@ -15,6 +16,7 @@ router.use("/donations", UserMiddleware.authenticate, donationRoutes);
 
 router.use("/dashboard", UserMiddleware.authenticate, dashboardRoutes);
 router.use("/files", UserMiddleware.authenticate, filesRoutes);
+router.use("/notifications", notificationRoutes);
 
 // router.use("/", homeRoutes)
 

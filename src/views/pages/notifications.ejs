@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head'); %>
+    <title>
+        <%= page && page.title ? page.title : 'Notifications | Blood Bank Management System' %>
+    </title>
+
+    <body>
+        <main class="hp-bg-color-dark-90 d-flex min-vh-100">
+            <%- include('../partials/sidebar'); %>
+
+                <div class="hp-main-layout">
+                    <%- include('../partials/top-navigation'); %>
+
+                        <div class="hp-main-layout-content">
+                            <div class="row mb-32">
+                                <div class="col-12 col-lg-10">
+                                    <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Notifications</h1>
+                                    <%- include('../partials/breadcrumb', { breadcrumbs: breadcrumbs }) %>
+                                </div>
+                            </div>
+
+                            <div class="card border-0 shadow-sm mb-24">
+                                <div class="card-body p-24">
+                                    <h4 class="mb-16">Send Notification</h4>
+                                    <form hx-post="/api/notifications/send" hx-target="#notificationResult"
+                                        hx-swap="innerHTML" class="row g-16" id="notificationForm">
+                                        <div class="col-12 col-md-4">
+                                            <label for="audienceSelect" class="form-label">Audience</label>
+                                            <select class="form-select" name="audience" id="audienceSelect" required>
+                                                <option value="BROADCAST">Broadcast (All Donors)</option>
+                                                <option value="DONOR">Single Donor</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <label for="channelSelect" class="form-label">Channel</label>
+                                            <select id="channelSelect" class="form-select" name="channel" required>
+                                                <option value="EMAIL">Email</option>
+                                                <option value="SMS">SMS</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <label for="templateSelect" class="form-label">Template</label>
+                                            <select class="form-select" name="templateType" id="templateSelect"
+                                                required>
+                                          <option value="DONOR_APPEAL">Donor Appeal</option>
+                                                <option value="EMERGENCY_BROADCAST">Emergency Broadcast</option>
+                                                <option value="DONOR_BIRTHDAY">Donor Birthday</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6" id="bloodGroupField">
+                                            <label for="bloodGroupSelect" class="form-label">Blood Group Target</label>
+                                            <select class="form-select" name="bloodGroup" id="bloodGroupSelect">
+                                                <option value="ALL">All blood groups</option>
+                                                <% (bloodGroups || []).forEach(function(group) { %>
+                                                    <option value="<%= group %>">
+                                                        <%= group %>
+                                                    </option>
+                                                    <% }); %>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6" id="donorField" style="display:none;">
+                                            <label for="donorSelect" class="form-label">Donor</label>
+                                            <select class="form-select" name="donorId" id="donorSelect">
+                                                <option value="">Select donor</option>
+                                                <% (donors || []).forEach(function(donor) { %>
+                                                    <option value="<%= donor._id %>">
+                                                        <%= donor.name %> (<%= donor.phoneNumber %>)
+                                                    </option>
+                                                    <% }); %>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-6" id="subjectField">
+                                            <label for="subjectInput" class="form-label">Subject (Email)</label>
+                                            <input id="subjectInput" type="text" class="form-control" name="subject"
+                                                placeholder="Emergency Blood Request" />
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label for="messageInput" class="form-label">Message</label>
+                                            <textarea id="messageInput" class="form-control" name="message" rows="5"
+                                                placeholder="Type your message" required></textarea>
+                                        </div>
+
+                                        <div class="col-12 d-flex gap-12">
+                                            <button type="submit" class="btn btn-primary">Send Notification</button>
+                                            <button type="reset" class="btn btn-outline-secondary">Clear</button>
+                                        </div>
+                                    </form>
+
+                                    <div id="notificationResult" class="mt-16"></div>
+                                </div>
+                            </div>
+
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-24">
+                                    <h4 class="mb-16">Recent Notification History</h4>
+                                    <div class="table-responsive">
+                                        <table class="table table-striped mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Audience</th>
+                                                    <th>Channel</th>
+                                                    <th>Template</th>
+                                                    <th>Blood Group</th>
+                                                    <th>Recipient</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (history && history.length> 0) { %>
+                                                    <% history.forEach(function(item) { %>
+                                                        <tr>
+                                                            <td>
+                                                                <%= item.createdAt ? new
+                                                                    Date(item.createdAt).toLocaleString() : '—' %>
+                                                            </td>
+                                                            <td>
+                                                                <%= item.audience %>
+                                                            </td>
+                                                            <td>
+                                                                <%= item.channel %>
+                                                            </td>
+                                                            <td>
+                                                                <%= item.templateType %>
+                                                            </td>
+                                                            <td>
+                                                                <%= item.bloodGroup || '—' %>
+                                                            </td>
+                                                            <td>
+                                                                <%= item.recipientName || item.recipientEmail ||
+                                                                    item.recipientPhoneNumber || '—' %>
+                                                            </td>
+                                                            <td>
+                                                                <% if (item.status==='SENT' ) { %>
+                                                                    <span class="badge bg-success">SENT</span>
+                                                                    <% } else if (item.status==='FAILED' ) { %>
+                                                                        <span class="badge bg-danger">FAILED</span>
+                                                                        <% } else { %>
+                                                                            <span
+                                                                                class="badge bg-warning text-dark">SKIPPED</span>
+                                                                            <% } %>
+                                                            </td>
+                                                        </tr>
+                                                        <% }); %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="7" class="text-center py-24">No
+                                                                        notifications sent yet</td>
+                                                                </tr>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+        </main>
+
+        <script>
+            (function () {
+                const audienceSelect = document.getElementById('audienceSelect');
+                const donorField = document.getElementById('donorField');
+                const donorSelect = document.getElementById('donorSelect');
+                const templateSelect = document.getElementById('templateSelect');
+                const subjectField = document.getElementById('subjectField');
+                const bloodGroupField = document.getElementById('bloodGroupField');
+                const bloodGroupSelect = document.getElementById('bloodGroupSelect');
+
+                function syncFormState() {
+                    const isDonor = audienceSelect.value === 'DONOR';
+                    const isBirthday = templateSelect.value === 'DONOR_BIRTHDAY';
+                    const isAppeal = templateSelect.value === 'DONOR_APPEAL';
+
+                    donorField.style.display = isDonor ? '' : 'none';
+                    donorSelect.required = isDonor;
+
+                    subjectField.style.display = isBirthday ? 'none' : '';
+
+                    bloodGroupField.style.display = !isDonor ? '' : 'none';
+                    bloodGroupSelect.required = isAppeal && !isDonor;
+                }
+
+                audienceSelect.addEventListener('change', syncFormState);
+                templateSelect.addEventListener('change', syncFormState);
+                syncFormState();
+
+                document.body.addEventListener('htmx:afterRequest', function (event) {
+                    if (event.target && event.target.id === 'notificationForm') {
+                        const xhr = event.detail && event.detail.xhr;
+                        if (xhr && xhr.status === 200) {
+                            const resultNode = document.getElementById('notificationResult');
+                            if (resultNode) {
+                                resultNode.innerHTML = '<div class="alert alert-success mb-0">Notification request processed successfully.</div>';
+                            }
+                        }
+                    }
+                });
+            })();
+        </script>
+    </body>
+    <%- include('../partials/bottom'); %>
+
+</html>

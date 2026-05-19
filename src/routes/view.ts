@@ -7,6 +7,7 @@ import DonationRepository from "../modules/blood-donation/repositories/DonationR
 import DonationService from "../modules/blood-donation/services/DonationService";
 import BloodUnitService from "../modules/blood-donation/services/BloodUnitService";
 import UserService from "../modules/users/services/UserService";
+import NotificationService from "../modules/notifications/services/NotificationService";
 import { IGetDonationsFilter } from "../modules/blood-donation/interfaces/IDonation";
 import { IGetBloodUnitsFilter } from "../modules/blood-donation/interfaces/IBloodUnit";
 import { BloodGroup } from "../modules/blood-donation/enum/donor.enum";
@@ -27,7 +28,7 @@ const getCurrentUser = async (userId: string) => {
       return await UserService.getUserById(userId);
     }
   } catch (_error) {
-    // Return null if user fetch fails
+    console.error("Failed to fetch current user", _error);
   }
   return null;
 };
@@ -331,6 +332,29 @@ router.get("/blood-units/:id/transition-form", UserMiddleware.authenticate, asyn
     unitId: unit._id,
     currentStatus: unit.status,
     allowedTransitions: transitions.allowedTransitions,
+  });
+});
+
+router.get("/notifications", UserMiddleware.authenticate, async (req: Request, res: Response) => {
+  const donorsData: any = await DonorService.getDonors({ page: 1, limit: 300 } as any);
+  const donors = Array.isArray(donorsData) ? donorsData : (donorsData?.docs || []);
+
+  const notificationService = new NotificationService();
+  const { data: history } = await notificationService.getHistory({ page: 1, limit: 20 });
+  const historyDocs = history?.docs || [];
+
+  return res.render("pages/notifications", {
+    page: {
+      ...basePageData,
+      title: "Notifications | Blood Bank Management System",
+    },
+    donors,
+    bloodGroups: Object.values(BloodGroup),
+    history: historyDocs,
+    breadcrumbs: [
+      { label: "Home", href: "/" },
+      { label: "Notifications" },
+    ],
   });
 });
 
