@@ -235,6 +235,7 @@ sequenceDiagram
 
 ---
 
-## Optional Next Step
+## Related Documentation
 
-If you want, I can also add a compact **System Context diagram** and **Component diagram** in a companion file for architecture-level onboarding.
+- **Flowcharts** (detailed control flow): [`README-UML.md`](./README-UML.md)
+- **Architecture diagrams** (system context, components): [`README-UML-ARCHITECTURE.md`](./README-UML-ARCHITECTURE.md)
