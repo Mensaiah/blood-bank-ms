@@ -1,0 +1,81 @@
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-striped mb-0">
+            <thead>
+                <tr>
+                    <th>Unit</th>
+                    <th>Blood Group</th>
+                    <th>Donor</th>
+                    <th>Status</th>
+                    <th>Collection Date</th>
+                    <th>Expiry Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (units && units.length> 0) { %>
+                    <% units.forEach(function(unit) { %>
+                        <tr>
+                            <td>
+                                <div class="fw-semibold">
+                                    <%= unit.unitId || unit._id %>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-danger">
+                                    <%= unit.bloodGroup || '—' %>
+                                </span>
+                            </td>
+                            <td>
+                                <%= unit.donorId && unit.donorId.name ? unit.donorId.name : '—' %>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary text-uppercase">
+                                    <%= unit.status || '—' %>
+                                </span>
+                            </td>
+                            <td>
+                                <%= unit.collectionDate ? new Date(unit.collectionDate).toLocaleString() : '—' %>
+                            </td>
+                            <td>
+                                <%= unit.expiryDate ? new Date(unit.expiryDate).toLocaleString() : '—' %>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-primary" href="/blood-units/<%= unit._id %>">View</a>
+                            </td>
+                        </tr>
+                        <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="7" class="text-center py-24">No blood units found</td>
+                                </tr>
+                                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<% if (pagination && pagination.totalPages && pagination.totalPages> 1) { %>
+    <div class="mt-16 d-flex justify-content-center">
+        <nav aria-label="Blood unit pagination">
+            <ul class="pagination mb-0">
+                <li class="page-item <%= pagination.page <= 1 ? 'disabled' : '' %>">
+                    <a class="page-link"
+                        href="/blood-units?page=<%= Math.max(1, pagination.page - 1) %>&limit=<%= pagination.limit || 10 %>">Previous</a>
+                </li>
+                <% for (let pageNumber=1; pageNumber <=pagination.totalPages; pageNumber++) { %>
+                    <li class="page-item <%= pageNumber === pagination.page ? 'active' : '' %>">
+                        <a class="page-link"
+                            href="/blood-units?page=<%= pageNumber %>&limit=<%= pagination.limit || 10 %>">
+                            <%= pageNumber %>
+                        </a>
+                    </li>
+                    <% } %>
+                        <li class="page-item <%= pagination.page >= pagination.totalPages ? 'disabled' : '' %>">
+                            <a class="page-link"
+                                href="/blood-units?page=<%= Math.min(pagination.totalPages, pagination.page + 1) %>&limit=<%= pagination.limit || 10 %>">Next</a>
+                        </li>
+            </ul>
+        </nav>
+    </div>
+    <% } %>

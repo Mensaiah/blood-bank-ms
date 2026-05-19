@@ -64,23 +64,36 @@
                 <div class="row align-items-center">
                     <div class="w-auto px-0">
                         <div class="avatar-item bg-primary-4 d-flex align-items-center justify-content-center rounded-circle"
-                            style="width: 48px; height: 48px;">
-                            <img src="../img/memoji/user-avatar-8.png" height="100%" class="hp-img-cover"
-                                alt="User avatar">
+                            style="width: 48px; height: 48px; font-weight: bold; color: white;">
+                            <% if (typeof currentUser !=='undefined' && currentUser && currentUser.profileImage) { %>
+                                <img src="<%= currentUser.profileImage %>" height="100%" class="hp-img-cover"
+                                    alt="User avatar">
+                                <% } else if (typeof currentUser !=='undefined' && currentUser) { %>
+                                    <%= currentUser.firstName.charAt(0).toUpperCase() %>
+                                        <%= currentUser.lastName.charAt(0).toUpperCase() %>
+                                            <% } else { %>
+                                                <img src="../img/memoji/user-avatar-8.png" height="100%"
+                                                    class="hp-img-cover" alt="User avatar">
+                                                <% } %>
                         </div>
                     </div>
-
                     <div class="w-auto ms-8 px-0 hp-sidebar-hidden mt-4">
-                        <span class="d-block hp-text-color-black-100 hp-text-color-dark-0 hp-p1-body lh-1">Jane
-                            Doe</span>
-                        <a href="profile-information.html" class="hp-badge-text fw-normal hp-text-color-dark-30">View
+                        <span class="d-block hp-text-color-black-100 hp-text-color-dark-0 hp-p1-body lh-1">
+                            <% if (typeof currentUser !=='undefined' && currentUser) { %>
+                                <%= currentUser.firstName %>
+                                    <%= currentUser.lastName %>
+                                        <% } else { %>
+                                            User
+                                            <% } %>
+                        </span>
+                        <a href="/profile-information" class="hp-badge-text fw-normal hp-text-color-dark-30">View
                             Profile</a>
                     </div>
                 </div>
             </div>
 
             <div class="col hp-flex-none w-auto px-0 hp-sidebar-hidden">
-                <a href="profile-information.html">
+                <a href="#/">
                     <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 24 24"
                         class="remix-icon hp-text-color-black-100 hp-text-color-dark-0" height="24" width="24"
                         xmlns="http://www.w3.org/2000/svg">

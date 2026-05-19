@@ -1,0 +1,50 @@
+<div class="transition-content" id="transitionContent">
+    <% if (allowedTransitions && allowedTransitions.length> 0) { %>
+        <form id="transitionForm" hx-patch="/donations/units/<%= unitId %>/status" hx-target="#transitionModalBody"
+            hx-swap="outerHTML">
+            <div class="mb-24">
+                <div class="p-12 rounded bg-light mb-16">
+                    <div class="text-muted small mb-2">Current Status</div>
+                    <div class="fw-semibold">
+                        <span class="badge bg-secondary text-uppercase">
+                            <%= currentStatus %>
+                        </span>
+                    </div>
+                </div>
+
+                <label for="statusSelect" class="form-label">Next Status</label>
+                <select id="statusSelect" name="status" class="form-select" required>
+                    <option value="">Select a status...</option>
+                    <% allowedTransitions.forEach(function(status) { %>
+                        <option value="<%= status %>">
+                            <%= status %>
+                        </option>
+                        <% }); %>
+                </select>
+            </div>
+
+            <div class="d-flex gap-12">
+                <button type="submit" class="btn btn-primary">Transition</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </form>
+
+        <script>
+            htmx.on('#transitionForm', 'htmx:afterRequest', function (evt) {
+                if (evt.detail.xhr.status === 200) {
+                    // Close modal and reload page
+                    const modal = bootstrap.Modal.getInstance(document.getElementById('transitionModal'));
+                    modal.hide();
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 300);
+                }
+            });
+        </script>
+        <% } else { %>
+            <div class="alert alert-info" role="alert">
+                No allowed transitions available for this blood unit status with your user role.
+            </div>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <% } %>
+</div>

@@ -59,15 +59,15 @@ export default class DashboardService {
             path: "/donors",
             icon: "ri-user-heart-line"
         },
-      {
-          name: "Donations",
-          path: "/donations",
-          icon: ""
+        {
+            name: "Donations",
+            path: "/donations",
+            icon: "ri-hand-heart-line"
         },
          {
             name: "Blood Units",
             path: "/blood-units",
-            icon: "ri-droplet-fill"
+            icon: "ri-droplet"
         },
     
         {

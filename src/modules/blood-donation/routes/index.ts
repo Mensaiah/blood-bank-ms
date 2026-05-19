@@ -8,6 +8,8 @@ const router = Router();
 // Blood Units
 router.get("/units", BloodUnitController.getAll);
 router.get("/units/fefo", BloodUnitController.getFefo);
+router.get("/units/blood-group-percentages", BloodUnitController.getBloodGroupPercentages);
+router.get("/units/:id/transitions", BloodUnitController.getNextAllowedTransitions);
 router.get("/units/:id", BloodUnitController.getById);
 router.post("/units", BloodUnitController.create);
 router.patch("/units/:id/status", BloodUnitController.transitionStatus);

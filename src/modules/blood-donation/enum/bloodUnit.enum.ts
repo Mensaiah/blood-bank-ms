@@ -12,12 +12,13 @@ export enum BloodUnitStatus {
 
 export const BLOOD_UNIT_STATUS_FLOW: Record<BloodUnitStatus, BloodUnitStatus[]> = {
   [BloodUnitStatus.DONATED]: [BloodUnitStatus.QUARANTINED],
-  [BloodUnitStatus.QUARANTINED]: [BloodUnitStatus.SCREENED, BloodUnitStatus.EXPIRED],
-  [BloodUnitStatus.SCREENED]: [BloodUnitStatus.AVAILABLE, BloodUnitStatus.RESERVED, BloodUnitStatus.EXPIRED],
-  [BloodUnitStatus.AVAILABLE]: [BloodUnitStatus.RESERVED, BloodUnitStatus.EXPIRED],
-  [BloodUnitStatus.RESERVED]: [BloodUnitStatus.DISPATCHED, BloodUnitStatus.AVAILABLE, BloodUnitStatus.EXPIRED],
+  [BloodUnitStatus.QUARANTINED]: [BloodUnitStatus.SCREENED],
+  [BloodUnitStatus.SCREENED]: [BloodUnitStatus.AVAILABLE, BloodUnitStatus.RESERVED],
+  [BloodUnitStatus.AVAILABLE]: [BloodUnitStatus.RESERVED],
+  [BloodUnitStatus.RESERVED]: [BloodUnitStatus.DISPATCHED, BloodUnitStatus.AVAILABLE],
   [BloodUnitStatus.DISPATCHED]: [],
   [BloodUnitStatus.EXPIRED]: [],
+
 };
 
 export const USER_ALLOWED_TO_TRANSITION_STATUS: Record<UserType, BloodUnitStatus[]> = {

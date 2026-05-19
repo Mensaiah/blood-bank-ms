@@ -1,0 +1,11 @@
+<div class="d-flex flex-column align-items-center gap-8">
+    <%- include('./blood-tank', { percentage: percentage, bloodGroup: bloodGroup }) %>
+        <div class="text-center">
+            <div class="fw-semibold text-dark">
+                <%= bloodGroup %>
+            </div>
+            <div class="text-muted">
+                <%= availableUnits %> / <%= goal %> available units
+            </div>
+        </div>
+</div>

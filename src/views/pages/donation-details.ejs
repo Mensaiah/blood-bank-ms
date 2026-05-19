@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head'); %>
+    <title>
+        <%= page && page.title ? page.title : 'Blood Bank Management System' %>
+    </title>
+
+    <body>
+        <main class="hp-bg-color-dark-90 d-flex min-vh-100">
+            <%- include('../partials/sidebar'); %>
+
+                <div class="hp-main-layout">
+                    <%- include('../partials/top-navigation'); %>
+
+                        <div class="hp-main-layout-content">
+                            <div class="row mb-32">
+                                <div class="col-12 col-lg-10">
+                                    <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Donation Details</h1>
+                                    <%- include('../partials/breadcrumb', { breadcrumbs: breadcrumbs }) %>
+                                </div>
+                            </div>
+
+                            <div class="card mb-24">
+                                <div class="card-body">
+                                    <div class="row g-4">
+                                        <div class="col-md-4">
+                                            <div class="text-muted">Donation Code</div>
+                                            <div class="fw-bold">
+                                                <%= donation.donationCode %>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="text-muted">Status</div>
+                                            <div class="fw-bold text-capitalize">
+                                                <%= donation.status %>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="text-muted">Date</div>
+                                            <div class="fw-bold">
+                                                <%= new Date(donation.donationDate).toLocaleString() %>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="text-muted">Donor</div>
+                                            <div class="fw-bold">
+                                                <%= donation.donorId && donation.donorId.name ? donation.donorId.name
+                                                    : 'Unknown donor' %>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="text-muted">Collected By</div>
+                                            <div class="fw-bold">
+                                                <%= donation.collectedBy || '—' %>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="text-muted">Units</div>
+                                            <div class="fw-bold">
+                                                <%= Array.isArray(donation.bloodUnits) ? donation.bloodUnits.length : 0
+                                                    %>
+                                            </div>
+                                        </div>
+                                        <div class="col-12">
+                                            <div class="text-muted">Notes</div>
+                                            <div class="fw-bold">
+                                                <%= donation.notes || '—' %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div class="p-16 border-bottom">
+                                        <h4 class="mb-0">Blood Units</h4>
+                                    </div>
+                                    <table class="table table-striped mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Unit ID</th>
+                                                <th>Status</th>
+                                                <th>Collection Date</th>
+                                                <th>Expiry Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% if (Array.isArray(donation.bloodUnits) && donation.bloodUnits.length> 0)
+                                                { %>
+                                                <% donation.bloodUnits.forEach(function(unit) { %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= unit.unitId || unit._id %>
+                                                        </td>
+                                                        <td class="text-capitalize">
+                                                            <%= unit.status || '—' %>
+                                                        </td>
+                                                        <td>
+                                                            <%= unit.collectionDate ? new
+                                                                Date(unit.collectionDate).toLocaleString() : '—' %>
+                                                        </td>
+                                                        <td>
+                                                            <%= unit.expiryDate ? new
+                                                                Date(unit.expiryDate).toLocaleDateString() : '—' %>
+                                                        </td>
+                                                    </tr>
+                                                    <% }); %>
+                                                        <% } else { %>
+                                                            <tr>
+                                                                <td colspan="4" class="text-center">No blood units found
+                                                                    for this donation</td>
+                                                            </tr>
+                                                            <% } %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+        </main>
+
+    </body>
+    <%- include('../partials/bottom'); %>
+
+</html>

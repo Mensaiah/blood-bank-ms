@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head'); %>
+    <title>
+        <%= page && page.title ? page.title : 'Blood Unit Details | Blood Bank Management System' %>
+    </title>
+
+    <body>
+        <main class="hp-bg-color-dark-90 d-flex min-vh-100">
+            <%- include('../partials/sidebar'); %>
+
+                <div class="hp-main-layout">
+                    <%- include('../partials/top-navigation'); %>
+
+                        <div class="hp-main-layout-content">
+                            <div class="row mb-32">
+                                <div class="col-12 col-lg-10">
+                                    <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Blood Unit Details
+                                    </h1>
+                                    <%- include('../partials/breadcrumb', { breadcrumbs: breadcrumbs }) %>
+                                </div>
+                            </div>
+
+                            <% const donor=unit && unit.donorId ? unit.donorId : null; %>
+                                <% const donorName=donor && donor.name ? donor.name : 'Unknown donor' ; %>
+                                    <% const donorId=donor && (donor._id || donor.id) ? (donor._id || donor.id) : '' ;
+                                        %>
+
+                                        <div class="card mb-24 border-0 shadow-sm">
+                                            <div class="card-body p-24">
+                                                <div
+                                                    class="d-flex flex-wrap justify-content-between align-items-start gap-16 mb-24">
+                                                    <div>
+                                                        <div class="text-muted mb-4">Unit ID</div>
+                                                        <h3 class="mb-0">
+                                                            <%= unit.unitId %>
+                                                        </h3>
+                                                    </div>
+                                                    <div class="d-flex align-items-center gap-12">
+                                                        <span class="badge bg-primary text-uppercase px-12 py-8">
+                                                            <%= unit.status %>
+                                                        </span>
+                                                        <button class="btn btn-sm btn-outline-secondary"
+                                                            hx-get="/blood-units/<%= unit._id %>/transition-form"
+                                                            hx-target="#transitionModalBody" hx-swap="innerHTML"
+                                                            data-bs-toggle="modal" data-bs-target="#transitionModal">
+                                                            Transition Status
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row g-20">
+                                                    <div class="col-12 col-md-3">
+                                                        <div class="p-16 rounded bg-light h-100">
+                                                            <div class="text-muted mb-4">Blood Group</div>
+                                                            <div class="fw-semibold">
+                                                                <span class="badge bg-danger" style="font-size: 1.1em;">
+                                                                    <%= unit.bloodGroup || '—' %>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-3">
+                                                        <div class="p-16 rounded bg-light h-100">
+                                                            <div class="text-muted mb-4">Donor</div>
+                                                            <div class="fw-semibold">
+                                                                <%= donorName %>
+                                                            </div>
+                                                            <% if (donorId) { %>
+                                                                <div class="mt-8">
+                                                                    <a href="/donors/<%= donorId %>">View donor
+                                                                        profile</a>
+                                                                </div>
+                                                                <% } %>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-3">
+                                                        <div class="p-16 rounded bg-light h-100">
+                                                            <div class="text-muted mb-4">Collection Date</div>
+                                                            <div class="fw-semibold">
+                                                                <%= unit.collectionDate ? new
+                                                                    Date(unit.collectionDate).toLocaleString() : '—' %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-3">
+                                                        <div class="p-16 rounded bg-light h-100">
+                                                            <div class="text-muted mb-4">Expiry Date</div>
+                                                            <div class="fw-semibold">
+                                                                <%= unit.expiryDate ? new
+                                                                    Date(unit.expiryDate).toLocaleString() : '—' %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card border-0 shadow-sm">
+                                            <div class="card-body p-24">
+                                                <h4 class="mb-16">Additional Information</h4>
+                                                <div class="row g-16">
+                                                    <div class="col-12 col-md-6">
+                                                        <div class="p-16 rounded bg-light h-100">
+                                                            <div class="text-muted mb-4">Created At</div>
+                                                            <div>
+                                                                <%= unit.createdAt ? new
+                                                                    Date(unit.createdAt).toLocaleString() : '—' %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 col-md-6">
+                                                        <div class="p-16 rounded bg-light h-100">
+                                                            <div class="text-muted mb-4">Updated At</div>
+                                                            <div>
+                                                                <%= unit.updatedAt ? new
+                                                                    Date(unit.updatedAt).toLocaleString() : '—' %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <% if (unit.transactionHistory && unit.transactionHistory.length> 0) { %>
+                                            <div class="card border-0 shadow-sm">
+                                                <div class="card-body p-24">
+                                                    <h4 class="mb-16">Transaction History</h4>
+                                                    <div class="table-responsive">
+                                                        <table class="table table-sm mb-0">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>From Status</th>
+                                                                    <th>To Status</th>
+                                                                    <th>User</th>
+                                                                    <th>Timestamp</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <% unit.transactionHistory.forEach(function(transaction)
+                                                                    { %>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <span class="badge bg-secondary">
+                                                                                <%= transaction.fromStatus %>
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <span class="badge bg-success">
+                                                                                <%= transaction.toStatus %>
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= transaction.userName %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <%= transaction.timestamp ? new
+                                                                                Date(transaction.timestamp).toLocaleString()
+                                                                                : '—' %>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <% }); %>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% } else { %>
+                                                <div class="card border-0 shadow-sm">
+                                                    <div class="card-body p-24">
+                                                        <p class="text-muted mb-0">No transaction history available</p>
+                                                    </div>
+                                                </div>
+                                                <% } %>
+                        </div>
+                </div>
+        </main>
+    </body>
+    <%- include('../partials/bottom'); %>
+
+        <%- include('../partials/transition-modal') %>
+
+</html>

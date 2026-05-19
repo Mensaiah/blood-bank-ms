@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head'); %>
+    <title>
+        <%= page && page.title ? page.title : 'Profile Information | Blood Bank Management System' %>
+    </title>
+
+    <body>
+        <main class="hp-bg-color-dark-90 d-flex min-vh-100">
+            <%- include('../partials/sidebar'); %>
+
+                <div class="hp-main-layout">
+                    <%- include('../partials/top-navigation'); %>
+
+                        <div class="hp-main-layout-content">
+                            <div class="row mb-32">
+                                <div class="col-12 col-lg-10">
+                                    <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Profile Information
+                                    </h1>
+                                    <%- include('../partials/breadcrumb', { breadcrumbs: breadcrumbs }) %>
+                                </div>
+                            </div>
+
+                            <% const avatarLetter=currentUser ? ((currentUser.firstName || 'U' ).charAt(0) +
+                                (currentUser.lastName || '' ).charAt(0)).toUpperCase() : 'U' ; %>
+
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body p-24">
+                                        <div class="d-flex flex-wrap align-items-center gap-16 mb-24">
+                                            <div class="avatar-item bg-primary-4 d-flex align-items-center justify-content-center rounded-circle"
+                                                style="width: 72px; height: 72px; font-weight: bold; color: white; font-size: 1.5rem;">
+                                                <% if (currentUser && currentUser.profileImage) { %>
+                                                    <img src="<%= currentUser.profileImage %>" alt="User profile"
+                                                        style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                                                    <% } else { %>
+                                                        <%= avatarLetter %>
+                                                            <% } %>
+                                            </div>
+
+                                            <div>
+                                                <h3 class="mb-2">
+                                                    <%= currentUser.firstName %>
+                                                        <%= currentUser.lastName %>
+                                                </h3>
+                                                <div class="text-muted">
+                                                    <%= currentUser.email %>
+                                                </div>
+                                                <div class="mt-6"><span class="badge bg-secondary text-uppercase">
+                                                        <%= currentUser.type %>
+                                                    </span></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row g-16">
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-16 rounded bg-light h-100">
+                                                    <div class="text-muted mb-4">First Name</div>
+                                                    <div class="fw-semibold">
+                                                        <%= currentUser.firstName %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-16 rounded bg-light h-100">
+                                                    <div class="text-muted mb-4">Last Name</div>
+                                                    <div class="fw-semibold">
+                                                        <%= currentUser.lastName %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-4">
+                                                <div class="p-16 rounded bg-light h-100">
+                                                    <div class="text-muted mb-4">Account Type</div>
+                                                    <div class="fw-semibold">
+                                                        <%= currentUser.type %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="p-16 rounded bg-light h-100">
+                                                    <div class="text-muted mb-4">Email</div>
+                                                    <div class="fw-semibold">
+                                                        <%= currentUser.email %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-md-6">
+                                                <div class="p-16 rounded bg-light h-100">
+                                                    <div class="text-muted mb-4">Last Login</div>
+                                                    <div class="fw-semibold">
+                                                        <%= currentUser.lastLoginAt ? new
+                                                            Date(currentUser.lastLoginAt).toLocaleString() : '—' %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                </div>
+        </main>
+    </body>
+    <%- include('../partials/bottom'); %>
+
+</html>

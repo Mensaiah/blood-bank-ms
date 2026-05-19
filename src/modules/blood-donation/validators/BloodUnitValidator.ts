@@ -18,7 +18,14 @@ export default class BloodUnitValidator {
 
   public static transitionStatus(data: any) {
     const schema = Joi.object({
-      status: Joi.string().valid(BloodUnitStatus.SCREENED, BloodUnitStatus.AVAILABLE, BloodUnitStatus.RESERVED, BloodUnitStatus.DISPATCHED, BloodUnitStatus.EXPIRED).required(),
+      status: Joi.string().valid(
+        BloodUnitStatus.QUARANTINED,
+        BloodUnitStatus.SCREENED,
+        BloodUnitStatus.AVAILABLE,
+        BloodUnitStatus.RESERVED,
+        BloodUnitStatus.DISPATCHED,
+        BloodUnitStatus.EXPIRED
+      ).required(),
     });
 
     const { error } = schema.validate(data);

@@ -33,6 +33,7 @@ export default class DonationService {
           unitId: `${input.donorId}-${Date.now()}-${i}`,
           collectionDate: input.donationDate || new Date(),
           expiryDate: BloodUnitService.calculateExpiryDate(input.donationDate),
+          bloodGroup: donor.bloodGroup,
           status: undefined,
         } as any, session);
 
@@ -60,7 +61,16 @@ export default class DonationService {
   }
 
   public static async getDonationById(id: string) {
-    return DonationRepository.findById(id);
+    const donation = await DonationRepository.findById(id) as any;
+
+    if (!donation) {
+      return null;
+    }
+
+    await donation.populate('donorId');
+    await donation.populate('bloodUnits');
+
+    return donation;
   }
 
   public static async getSummaryCounts() {

@@ -9,6 +9,7 @@ export interface IUser extends Document {
     status: UserStatus;
   type: UserType;
   lastLoginAt: Date;
+  profileImage?: string;
     createdAt: Date;
     updatedAt: Date;
 

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head'); %>
+    <title>
+        <%= page && page.title ? page.title : 'Blood Units | Blood Bank Management System' %>
+    </title>
+
+    <body>
+        <main class="hp-bg-color-dark-90 d-flex min-vh-100">
+            <%- include('../partials/sidebar'); %>
+
+                <div class="hp-main-layout">
+                    <%- include('../partials/top-navigation'); %>
+
+                        <div class="hp-main-layout-content">
+                            <div class="row mb-32">
+                                <div class="col-12 col-lg-10">
+                                    <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Blood Units</h1>
+                                    <%- include('../partials/breadcrumb', { breadcrumbs: breadcrumbs }) %>
+                                </div>
+                            </div>
+
+                            <% const bloodUnits=Array.isArray(units) ? units : []; %>
+                                <% const totalUnits=bloodUnits.length; %>
+                                    <% const donatedUnits=bloodUnits.filter(function(unit) { return
+                                        unit.status==='DONATED' ; }).length; %>
+                                        <% const availableUnits=bloodUnits.filter(function(unit) { return
+                                            unit.status==='AVAILABLE' ; }).length; %>
+                                            <% const expiredUnits=bloodUnits.filter(function(unit) { return
+                                                unit.status==='EXPIRED' ; }).length; %>
+                                                <% const expiringSoonUnits=bloodUnits.filter(function(unit) { if
+                                                    (!unit.expiryDate) return false; const expiryDate=new
+                                                    Date(unit.expiryDate); const now=new Date(); const
+                                                    sevenDaysFromNow=new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
+                                                    return expiryDate>= now && expiryDate <= sevenDaysFromNow;
+                                                        }).length; %>
+
+                                                        <div class="row g-16 mb-24">
+                                                            <div class="col-12 col-md-6 col-xl-3">
+                                                                <div class="card border-0 shadow-sm h-100">
+                                                                    <div class="card-body p-20">
+                                                                        <div class="text-muted mb-4">Total Units</div>
+                                                                        <h3 class="mb-0">
+                                                                            <%= totalUnits %>
+                                                                        </h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 col-xl-3">
+                                                                <div class="card border-0 shadow-sm h-100">
+                                                                    <div class="card-body p-20">
+                                                                        <div class="text-muted mb-4">Donated</div>
+                                                                        <h3 class="mb-0 text-primary">
+                                                                            <%= donatedUnits %>
+                                                                        </h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 col-xl-3">
+                                                                <div class="card border-0 shadow-sm h-100">
+                                                                    <div class="card-body p-20">
+                                                                        <div class="text-muted mb-4">Available</div>
+                                                                        <h3 class="mb-0 text-success">
+                                                                            <%= availableUnits %>
+                                                                        </h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 col-xl-3">
+                                                                <div class="card border-0 shadow-sm h-100">
+                                                                    <div class="card-body p-20">
+                                                                        <div class="text-muted mb-4">Expiring Soon</div>
+                                                                        <h3 class="mb-0 text-warning">
+                                                                            <%= expiringSoonUnits %>
+                                                                        </h3>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row g-16 mb-24">
+                                                            <div class="col-12">
+                                                                <div class="card border-0 shadow-sm">
+                                                                    <div class="card-body p-20">
+                                                                        <div
+                                                                            class="d-flex flex-wrap align-items-center justify-content-between gap-16">
+                                                                            <div>
+                                                                                <h4 class="mb-1">Blood Group Capacity
+                                                                                </h4>
+                                                                                <p class="text-muted mb-0">Capacity is
+                                                                                    calculated from available units
+                                                                                    units per blood
+                                                                                    group.</p>
+                                                                            </div>
+                                                                            <div style="min-width: 220px;">
+                                                                                <label for="bloodGroupSelect"
+                                                                                    class="form-label mb-1">Blood
+                                                                                    Group</label>
+                                                                                <select id="bloodGroupSelect"
+                                                                                    name="bloodGroup"
+                                                                                    class="form-select"
+                                                                                    hx-get="/blood-units/blood-group-tank"
+                                                                                    hx-trigger="load, change"
+                                                                                    hx-target="#bloodGroupTankContainer"
+                                                                                    hx-swap="innerHTML">
+                                                                                    <% bloodGroups.forEach(function(group)
+                                                                                        { %>
+                                                                                        <option value="<%= group %>"
+                                                                                            <%=selectedBloodGroup===group
+                                                                                            ? 'selected' : '' %>>
+                                                                                            <%= group %>
+                                                                                        </option>
+                                                                                        <% }); %>
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div id="bloodGroupTankContainer"
+                                                                            class="mt-16 d-flex justify-content-center">
+                                                                            <%- include('../partials/blood-group-tank-card',
+                                                                                { bloodGroup: bloodGroupTank.bloodGroup,
+                                                                                percentage: bloodGroupTank.percentage,
+                                                                                availableUnits:
+                                                                                bloodGroupTank.availableUnits, goal: 200
+                                                                                }) %>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <%- include('../partials/blood-unit-list', { units: bloodUnits,
+                                                            pagination: pagination }) %>
+                        </div>
+                </div>
+        </main>
+    </body>
+    <%- include('../partials/bottom'); %>
+
+        <script>
+            (function () {
+                function syncTank(root) {
+                    if (!root) return;
+
+                    const tank = root.matches && root.matches('.water-tank') ? root : root.querySelector('.water-tank');
+                    if (!tank) return;
+
+                    const percentage = Math.max(0, Math.min(100, Number(tank.dataset.percentage || 0)));
+                    const liquid = tank.querySelector('.liquid');
+                    const label = tank.querySelector('#bloodTankLabel');
+
+                    if (liquid) {
+                        liquid.style.height = percentage + '%';
+                    }
+
+                    if (label) {
+                        label.style.bottom = percentage + '%';
+                    }
+                }
+
+                function syncAllTanks() {
+                    document.querySelectorAll('.water-tank').forEach(syncTank);
+                }
+
+                document.addEventListener('DOMContentLoaded', syncAllTanks);
+                document.body.addEventListener('htmx:afterSwap', function (event) {
+                    if (event.target && event.target.closest && event.target.closest('#bloodGroupTankContainer')) {
+                        syncAllTanks();
+                    }
+                });
+            })();
+        </script>
+
+        <%- include('../partials/transition-modal') %>
+
+</html>

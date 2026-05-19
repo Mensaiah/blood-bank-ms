@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema(
       enum: Object.values(UserType),
     },
     lastLoginAt: { type: Date },
+    profileImage: { type: String, default: null },
   },
   {
     strict: true,

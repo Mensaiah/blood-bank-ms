@@ -3,6 +3,7 @@ import mongoosePagination from "mongoose-paginate-v2";
 import constants from "../../../config/constants";
 import { IBloodUnit } from "../interfaces/IBloodUnit";
 import { BloodUnitStatus } from "../enum/bloodUnit.enum";
+import { BloodGroup } from "../enum/donor.enum";
 
 const BloodUnitSchema = new mongoose.Schema(
   {
@@ -31,6 +32,42 @@ const BloodUnitSchema = new mongoose.Schema(
       enum: Object.values(BloodUnitStatus),
       default: BloodUnitStatus.DONATED,
       required: true,
+    },
+    bloodGroup: {
+      type: String,
+      enum: Object.values(BloodGroup),
+      required: true,
+      index: true,
+    },
+    transactionHistory: {
+      type: [
+      {
+        fromStatus: {
+          type: String,
+          enum: Object.values(BloodUnitStatus),
+          required: true,
+        },
+        toStatus: {
+          type: String,
+          enum: Object.values(BloodUnitStatus),
+          required: true,
+        },
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: constants.COLLECTION_NAMES.USERS,
+          required: true,
+        },
+        userName: {
+          type: String,
+          required: true,
+        },
+        timestamp: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+      ],
+      default: [],
     },
   },
   {
