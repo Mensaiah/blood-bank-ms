@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head'); %>
+    <title>
+        <%= page && page.title ? page.title : 'Blood Bank Management System' %>
+    </title>
+
+    <body>
+        <main class="hp-bg-color-dark-90 d-flex min-vh-100">
+            <%- include('../partials/sidebar'); %>
+
+                <div class="hp-main-layout">
+                    <%- include('../partials/top-navigation'); %>
+
+                        <div class="hp-main-layout-content">
+
+                            <div id="donation-stats-container" hx-get="/donations/stats" hx-trigger="load"
+                                hx-swap="innerHTML">
+                                <%- include('../partials/donation-stats', { stats: stats }) %>
+                            </div>
+
+                            <div class="row mb-32">
+                                <div class="col-12">
+                                    <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Donations</h1>
+                                    <%- include('../partials/breadcrumb', { breadcrumbs: breadcrumbs }) %>
+                                </div>
+                            </div>
+
+                            <div id="donation-list-container" hx-get="/api/donations" hx-trigger="load"
+                                hx-swap="innerHTML">
+                                <%- include('../partials/donation-list', { donations: donations || [] }) %>
+                            </div>
+
+                               <a href="/donations/create"
+                class="btn btn-ghost btn-primary position-fixed rounded-circle d-flex align-items-center justify-content-center shadow"
+                style="right: 24px; bottom: 24px; width: 56px; height: 56px; z-index: 1050;" aria-label="Create Donation">
+                <span style="font-size: 28px; line-height: 1;">+</span>
+              </a>
+                        </div>
+                </div>
+        </main>
+
+    </body>
+    <%- include('../partials/bottom'); %>
+
+</html>

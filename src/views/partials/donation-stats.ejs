@@ -1,0 +1,29 @@
+<div class="row mb-24">
+    <div class="col-12">
+        <div class="d-flex gap-16 align-items-stretch flex-wrap">
+            <% if (Array.isArray(stats)) { %>
+                <% stats.forEach(function(s) { %>
+                    <div class="card p-16" style="flex:1; min-width: 220px;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-4">
+                                    <%= s.label %>
+                                </h6>
+                                <h2 class="mb-0">
+                                    <%= s.count %>
+                                </h2>
+                            </div>
+                            <div class="hp-text-color-muted">
+                                <i class="ri-file-list-3-line" style="font-size:28px"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <% }); %>
+                        <% } else { %>
+                            <div class="card p-16 w-100">
+                                <div class="text-center">No stats available</div>
+                            </div>
+                            <% } %>
+        </div>
+    </div>
+</div>

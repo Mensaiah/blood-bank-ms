@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head'); %>
+    <title>
+        <%= page && page.title ? page.title : 'Blood Bank Management System' %>
+    </title>
+
+    <body>
+        <main class="hp-bg-color-dark-90 d-flex min-vh-100">
+            <%- include('../partials/sidebar'); %>
+
+                <div class="hp-main-layout">
+                    <%- include('../partials/top-navigation'); %>
+
+                        <div class="hp-main-layout-content">
+                            <div id="alert-container" style="position: sticky; top: 0; z-index: 1000; padding: 16px 0;">
+                            </div>
+
+                            <div class="row mb-32">
+                                <div class="col-12 col-lg-10">
+                                    <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Create Donation</h1>
+                                    <%- include('../partials/breadcrumb', { breadcrumbs: breadcrumbs }) %>
+                                </div>
+                            </div>
+
+                            <div class="card p-16">
+                                <form id="createDonationForm" class="row g-3">
+                                    <div class="col-md-6 position-relative">
+                                        <label for="donorId" class="form-label">Donor</label>
+                                        <input type="hidden" id="donorId" name="donorId" required />
+                                        <input type="text" id="donorSearch" class="form-control" name="searchText"
+                                            placeholder="Search donor by name or donation ID" autocomplete="off"
+                                            hx-get="/api/donations/donors?view=search"
+                                            hx-trigger="keyup changed delay:300ms" hx-target="#donorSearchResults"
+                                            hx-swap="innerHTML" />
+                                        <small class="text-muted d-block mt-2">
+                                            Search donors, then choose from the list below.
+                                        </small>
+                                        <div id="donorSearchResults" class="mt-2"></div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="donationDate" class="form-label">Donation Date</label>
+                                        <input type="datetime-local" id="donationDate" name="donationDate"
+                                            class="form-control" value="<%= new Date().toISOString().slice(0,16) %>"
+                                            required />
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label for="bloodGroupUnits" class="form-label">Units</label>
+                                        <input type="number" id="bloodGroupUnits" name="bloodGroupUnits"
+                                            class="form-control" min="1" value="1" required />
+                                    </div>
+
+                                    <div class="col-md-4">
+                                        <label for="collectedBy" class="form-label">Collected By</label>
+                                        <input type="text" id="collectedBy" name="collectedBy" class="form-control" />
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="notes" class="form-label">Notes</label>
+                                        <textarea id="notes" name="notes" class="form-control" rows="3"></textarea>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <button id="createDonationSubmit" type="submit" class="btn btn-primary">Create
+                                            Donation</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                </div>
+        </main>
+
+    </body>
+    <%- include('../partials/bottom'); %>
+        <script src="/js/create-donation.js"></script>
+
+</html>

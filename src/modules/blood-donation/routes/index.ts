@@ -1,6 +1,7 @@
 import { Router } from "express";
 import BloodUnitController from "../controller/BloodUnitController";
 import DonorController from "../controller/DonorController";
+import DonationController from "../controller/DonationController";
 
 const router = Router();
 
@@ -16,6 +17,11 @@ router.post("/units/expire-due", BloodUnitController.expireDueUnits);
 router.get("/donors", DonorController.getAll);
 router.get("/donors/:id", DonorController.getById);
 router.post("/donors", DonorController.create);
-router.patch("/donors/:id", DonorController.update);
+router.post("/donors/:id", DonorController.update);
+
+// Donations
+router.get("/", DonationController.getAll);
+router.post("/", DonationController.create);
+router.get("/:id", DonationController.getById);
 
 export default router;

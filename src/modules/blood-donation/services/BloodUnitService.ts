@@ -42,7 +42,7 @@ export default class BloodUnitService {
     return BloodUnitRepository.findById(id);
   }
 
-  private static calculateExpiryDate(collectionDate?: Date | string, expiryDate?: Date | string) {
+  public static calculateExpiryDate(collectionDate?: Date | string, expiryDate?: Date | string) {
     if (expiryDate) {
       return new Date(expiryDate);
     }
@@ -58,7 +58,7 @@ export default class BloodUnitService {
     try {
 
     const payload: Partial<IBloodUnit> = {
-      donorId: input.donorId,
+      donorId: input.donorId as any,
       collectionDate: new Date(),
       expiryDate: this.calculateExpiryDate(input.collectionDate, ""),
       status:  BloodUnitStatus.DONATED,
@@ -70,7 +70,7 @@ export default class BloodUnitService {
       bloodUnitsData.push({
         ...payload,
         unitId: `${input.donorId}-${Date.now()}-${i}`,
-      });
+      } as any);
 
     }
       await Promise.all(
@@ -100,7 +100,7 @@ export default class BloodUnitService {
       return { error: "Specified Blood Unit cannot be found" };
     }
 
-    const allowedTransitions = BLOOD_UNIT_STATUS_FLOW[bloodUnit.status as BloodUnitStatus] || [];
+    const allowedTransitions = BLOOD_UNIT_STATUS_FLOW[bloodUnit.status] || [];
     
     if (!allowedTransitions.includes(nextStatus)) {
       return { error: `Transition from ${bloodUnit.status} to ${nextStatus} is not authorized` };

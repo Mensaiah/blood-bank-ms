@@ -1,0 +1,16 @@
+<% if (donors && donors.length> 0) { %>
+    <div class="list-group shadow-sm" style="position: relative; z-index: 20;">
+        <% donors.forEach(function(donor) { %>
+            <button type="button" class="list-group-item list-group-item-action donor-search-item"
+                data-donor-id="<%= donor._id %>" data-donor-label="<%= donor.donationId %> - <%= donor.name %>">
+                <strong>
+                    <%= donor.donationId %>
+                </strong> - <%= donor.name %>
+            </button>
+            <% }); %>
+    </div>
+    <% } else { %>
+        <div class="alert alert-light border mb-0">
+            No donors found.
+        </div>
+        <% } %>

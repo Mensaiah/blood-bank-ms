@@ -6,6 +6,7 @@ import { FileType } from "../../enum/File";
 export const COLLECTION_NAMES = {
     USERS: "Users",
     DONORS: "Donors",
+    DONATIONS: "Donations",
     BLOOD_UNITS: "BloodUnits",
     AUTHS: "Auths",
     NOTIFICATIONS: "notifications",

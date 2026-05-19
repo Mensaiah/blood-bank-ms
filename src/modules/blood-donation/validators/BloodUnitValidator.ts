@@ -6,7 +6,7 @@ export default class BloodUnitValidator {
     const schema = Joi.object({
       donorId: Joi.string().required(),
       collectionDate: Joi.date(),
-      unit: Joi.number().integer().positive().required(),
+      unit: Joi.number().integer().max(2).positive().required(),
     });
 
     const { error } = schema.validate(data);

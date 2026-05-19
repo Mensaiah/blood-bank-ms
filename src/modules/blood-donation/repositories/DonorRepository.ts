@@ -5,7 +5,7 @@ import { IDonor } from "../interfaces/IDonor";
 import mongoose from "mongoose";
 
 class DonorRepository extends Repository<IDonor> {
-  private readonly MainModel = DonorModel;
+  public readonly MainModel = DonorModel;
   constructor() {
     super(DonorModel);
   }

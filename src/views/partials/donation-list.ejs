@@ -1,0 +1,46 @@
+<div class="card">
+    <div class="card-body p-0">
+        <table class="table table-striped mb-0">
+            <thead>
+                <tr>
+                    <th>Donation</th>
+                    <th>Donor</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Units</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (donations && donations.length> 0) { %>
+                    <% donations.forEach(function(d) { %>
+                        <tr>
+                            <td>
+                                <%= d.donationCode || d._id %>
+                            </td>
+                            <td>
+                                <%= d.donorId ? (d.donorId.name || d.donorId) : '—' %>
+                            </td>
+                            <td>
+                                <%= d.status %>
+                            </td>
+                            <td>
+                                <%= new Date(d.donationDate).toLocaleString() %>
+                            </td>
+                            <td>
+                                <%= Array.isArray(d.bloodUnits) ? d.bloodUnits.length : (d.bloodUnits ? 1 : 0) %>
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-outline-primary" href="/donations/<%= d._id %>">View</a>
+                            </td>
+                        </tr>
+                        <% }); %>
+                            <% } else { %>
+                                <tr>
+                                    <td colspan="6" class="text-center">No donations found</td>
+                                </tr>
+                                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>

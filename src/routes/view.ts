@@ -3,6 +3,9 @@ import "express-async-errors";
 
 import UserMiddleware from "../middlewares/user";
 import DonorService from "../modules/blood-donation/services/DonorService";
+import DonationRepository from "../modules/blood-donation/repositories/DonationRepository";
+import DonationService from "../modules/blood-donation/services/DonationService";
+import { IGetDonationsFilter } from "../modules/blood-donation/interfaces/IDonation";
 
 const router = Router();
 
@@ -59,6 +62,7 @@ router.get("/donors/:id", async (req: Request, res: Response) => {
       title: `${donor.name} | Donor Profile`,
     },
     donor,
+    donations: await DonationRepository.getDonationsByDonor(donor._id.toString(), 10, 0),
     breadcrumbs: [
       { label: "Home", href: "/" },
       { label: "Donors", href: "/donors" },
@@ -93,6 +97,66 @@ router.get("/donors/:id/edit", async (req: Request, res: Response) => {
     ],
   });
 });
+
+router.get("/donations", UserMiddleware.authenticate, async (req: Request, res: Response) => {
+  const filter: IGetDonationsFilter = {
+    limit: 10,
+    page: 1,
+    ...req.query as any,
+  };
+
+  const { data: donations } = await DonationService.getDonations(filter);
+  const stats = await DonationService.getSummaryCounts();
+  const donationsList = Array.isArray(donations) ? donations : donations.docs;
+  const pagination = Array.isArray(donations)
+    ? { page: 1, totalPages: 1, totalDocs: donations.length, limit: donations.length }
+    : {
+        page: donations.page,
+        totalPages: donations.totalPages,
+        totalDocs: donations.totalDocs,
+        limit: donations.limit,
+      };
+
+  res.render("pages/donations", {
+    page: {
+      ...basePageData,
+      title: "Donations | Blood Bank Management System",
+    },
+    stats,
+    donations: donationsList,
+    pagination,
+    breadcrumbs: [
+      { label: "Home", href: "/" },
+      { label: "Donations" },
+    ],
+  });
+});
+
+router.get("/donations/stats", UserMiddleware.authenticate, async (req: Request, res: Response) => {
+  const stats = await DonationService.getSummaryCounts();
+
+  return res.render("partials/donation-stats", { stats });
+});
+
+
+router.get("/donations/create", async (req: Request, res: Response) => {
+  const donors = await DonorService.getDonors({ page: 1, limit: 100 } as any);
+
+  res.render("pages/create-donation", {
+    page: {
+      ...basePageData,
+      title: "Create Donation | Blood Bank Management System",
+    },
+    donors,
+    breadcrumbs: [
+      { label: "Home", href: "/" },
+      { label: "Donations", href: "/donations" },
+      { label: "Create Donation" },
+    ],
+  });
+
+})
+
 
 router.get("/login", (req: Request, res: Response) => {
   res.render("pages/login", {

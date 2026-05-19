@@ -9,6 +9,10 @@ export default class DonorController {
     const donors = await DonorService.getDonors(query);
     
     if (req.get("HX-Request") === "true") {
+      if (query.view === "search") {
+        return res.render("partials/donor-search-results", { donors: Array.isArray(donors) ? donors : donors.docs || [] });
+      }
+
       return res.render("partials/donor-list", { donors: Array.isArray(donors) ? donors : donors.docs || [] });
     }
     

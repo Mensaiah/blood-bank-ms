@@ -17,21 +17,28 @@ export default class UserMiddleware {
         
         if (!token) {
 
-            if (isHtmxRequest) {
+    
                 return res.redirect("/login");
-            }
+   
                     
-            return StandardResponse.errorResponse(res, "Invalid Token Provided", 401, StandardReponseCode.INVALID_AUTH_TOKEN)
+            // return StandardResponse.errorResponse(res, "Invalid Token Provided", 401, StandardReponseCode.INVALID_AUTH_TOKEN)
         }
     
         const { valid, expired, decoded } = AuthService.verifyToken(token);
 
         if (!valid) {
-            return StandardResponse.errorResponse(res, "Invalid Token", 401, StandardReponseCode.INVALID_AUTH_TOKEN) 
+
+   
+                return res.redirect("/login");
+            
+            // return StandardResponse.errorResponse(res, "Invalid Token", 401, StandardReponseCode.INVALID_AUTH_TOKEN) 
         }
         
         if (expired) {
-            return StandardResponse.errorResponse(res, "Token Expired", 401, StandardReponseCode.INVALID_AUTH_TOKEN);
+        
+                return res.redirect("/login");
+    
+            // return StandardResponse.errorResponse(res, "Token Expired", 401, StandardReponseCode.INVALID_AUTH_TOKEN);
         };
     
     

@@ -13,6 +13,9 @@
                     <%- include('../partials/top-navigation'); %>
 
                         <div class="hp-main-layout-content">
+                            <div id="alert-container" style="position: sticky; top: 0; z-index: 1000; padding: 16px 0;">
+                            </div>
+
                             <div class="row mb-32">
                                 <div class="col-12 col-lg-10">
                                     <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Edit Donor</h1>
@@ -28,6 +31,7 @@
 
     </body>
     <%- include('../partials/bottom'); %>
+        <script src="/js/alert-notification.js"></script>
         <script src="/js/donor-form.js"></script>
 
 </html>
