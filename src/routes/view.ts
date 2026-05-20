@@ -295,6 +295,7 @@ router.get("/blood-units/blood-group-tank", UserMiddleware.authenticate, async (
 });
 
 router.get("/blood-units/:id", UserMiddleware.authenticate, async (req: Request, res: Response) => {
+  const userType = res.locals.user.type;
   const unit = await BloodUnitService.getBloodUnitById(String(req.params.id));
 
   if (!unit) {
@@ -306,12 +307,15 @@ router.get("/blood-units/:id", UserMiddleware.authenticate, async (req: Request,
     });
   }
 
+  const transitions = BloodUnitService.getNextAllowedTransitions(unit.status, userType);
+
   return res.render("pages/blood-unit-details", {
     page: {
       ...basePageData,
       title: `Blood Unit ${unit.unitId} | Blood Bank Management System`,
     },
     unit,
+    allowedTransitions: transitions.allowedTransitions,
     breadcrumbs: [
       { label: "Home", href: "/" },
       { label: "Blood Units", href: "/blood-units" },

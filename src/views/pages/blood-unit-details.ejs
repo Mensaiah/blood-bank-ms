@@ -40,13 +40,40 @@
                                                         <span class="badge bg-primary text-uppercase px-12 py-8">
                                                             <%= unit.status %>
                                                         </span>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary"
-                                                            hx-get="/blood-units/<%= unit._id %>/transition-form"
-                                                            hx-target="#transitionModalBody" hx-swap="innerHTML"
-                                                            data-bs-toggle="modal" data-bs-target="#transitionModal">
-                                                            Transition Status
-                                                        </button>
                                                     </div>
+                                                </div>
+
+                                                <div class="p-16 rounded bg-light mb-20">
+                                                    <h5 class="mb-12">Transition Status</h5>
+                                                    <% if (allowedTransitions && allowedTransitions.length> 0) { %>
+                                                        <form id="inlineTransitionForm"
+                                                            hx-patch="/api/donations/units/<%= unit._id %>/status"
+                                                            hx-swap="none" class="row g-12 align-items-end">
+                                                            <div class="col-12 col-md-6">
+                                                                <label for="inlineStatusSelect" class="form-label">Next
+                                                                    Status</label>
+                                                                <select id="inlineStatusSelect" name="status"
+                                                                    class="form-select" required>
+                                                                    <option value="">Select a status...</option>
+                                                                    <% allowedTransitions.forEach(function(status) { %>
+                                                                        <option value="<%= status %>">
+                                                                            <%= status %>
+                                                                        </option>
+                                                                        <% }); %>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-12 col-md-auto">
+                                                                <button type="submit" class="btn btn-primary">Apply
+                                                                    Transition</button>
+                                                            </div>
+                                                        </form>
+                                                        <div id="transitionResult" class="mt-12"></div>
+                                                        <% } else { %>
+                                                            <div class="alert alert-info mb-0" role="alert">
+                                                                No allowed transitions available for this blood unit
+                                                                status with your user role.
+                                                            </div>
+                                                            <% } %>
                                                 </div>
 
                                                 <div class="row g-20">
@@ -174,9 +201,39 @@
                                                 <% } %>
                         </div>
                 </div>
-                <%- include('../partials/transition-modal') %>
         </main>
         <%- include('../partials/bottom'); %>
+            <script>
+                (function () {
+                    const form = document.getElementById('inlineTransitionForm');
+                    const result = document.getElementById('transitionResult');
+
+                    if (!form) return;
+
+                    form.addEventListener('htmx:afterRequest', function (evt) {
+                        const xhr = evt.detail && evt.detail.xhr;
+                        if (!xhr || !result) return;
+
+                        if (xhr.status === 200) {
+                            result.innerHTML = '<div class="alert alert-success mb-0">Status updated successfully. Reloading...</div>';
+                            setTimeout(function () {
+                                window.location.reload();
+                            }, 250);
+                            return;
+                        }
+
+                        let message = 'Failed to transition status';
+                        try {
+                            const payload = JSON.parse(xhr.responseText);
+                            message = payload.message || message;
+                        } catch (_error) {
+                            message = xhr.statusText || message;
+                        }
+
+                        result.innerHTML = '<div class="alert alert-danger mb-0">' + message + '</div>';
+                    });
+                })();
+            </script>
     </body>
 
 </html>

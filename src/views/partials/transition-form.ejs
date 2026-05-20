@@ -1,6 +1,6 @@
 <div class="transition-content" id="transitionContent">
     <% if (allowedTransitions && allowedTransitions.length> 0) { %>
-        <form id="transitionForm" hx-patch="/donations/units/<%= unitId %>/status" hx-target="#transitionModalBody"
+        <form id="transitionForm" hx-patch="/api/donations/units/<%= unitId %>/status" hx-target="#transitionModalBody"
             hx-swap="outerHTML">
             <div class="mb-24">
                 <div class="p-12 rounded bg-light mb-16">
@@ -30,14 +30,14 @@
         </form>
 
         <script>
-            htmx.on('#transitionForm', 'htmx:afterRequest', function (evt) {
-                if (evt.detail.xhr.status === 200) {
-                    // Close modal and reload page
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('transitionModal'));
+            document.getElementById('transitionForm')?.addEventListener('htmx:afterRequest', function (evt) {
+                if (evt.detail && evt.detail.xhr && evt.detail.xhr.status === 200) {
+                    const modalElement = document.getElementById('transitionModal');
+                    const modal = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
                     modal.hide();
-                    setTimeout(() => {
+                    setTimeout(function () {
                         window.location.reload();
-                    }, 300);
+                    }, 250);
                 }
             });
         </script>

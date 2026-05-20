@@ -24,7 +24,7 @@ export const BLOOD_UNIT_STATUS_FLOW: Record<BloodUnitStatus, BloodUnitStatus[]> 
 export const USER_ALLOWED_TO_TRANSITION_STATUS: Record<UserType, BloodUnitStatus[]> = {
   [UserType.ADMIN]:  [BloodUnitStatus.QUARANTINED, BloodUnitStatus.SCREENED, BloodUnitStatus.AVAILABLE, BloodUnitStatus.RESERVED, BloodUnitStatus.DISPATCHED, BloodUnitStatus.EXPIRED],
   [UserType.HOSPITAL_REP]: [],
-  [UserType.LAB_REP]: [BloodUnitStatus.QUARANTINED, BloodUnitStatus.SCREENED],
+  [UserType.LAB_REP]: [BloodUnitStatus.QUARANTINED, BloodUnitStatus.SCREENED, BloodUnitStatus.RESERVED, BloodUnitStatus.AVAILABLE],
   [UserType.USER]: [],
 
 
