@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rm -rf dist && tsc -p . && cpx \"src/views/**/*\" dist/views",
+    "build": "rm -rf dist && tsc -p . && npx cpx2 \"src/views/**/*\" dist/views && npx cpx2 \"src/public/**/*\" dist/public",
     "start": "node dist/app/server.js",
     "dev": "npx nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/app/server.ts",
     "prepare": "husky"
@@ -21,7 +21,6 @@
     "cloudinary": "^2.10.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "cpx2": "^9.0.0",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.7",
     "ejs": "^5.0.2",
