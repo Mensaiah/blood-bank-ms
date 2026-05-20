@@ -19,5 +19,5 @@
     ],
 
   },
-  "include": [ "src/**/*.ts","src/**/*.tsx" ,"**/*.js", "@types/**/*.d.ts", "src/**/*.json", "src/modules/tours/interfaces/IBooking.ts" ],
+  "include": [ "src/**/*.ts","src/**/*.tsx"  ,"**/*.ejs","**/*.js", "@types/**/*.d.ts", "src/**/*.json", "src/modules/tours/interfaces/IBooking.ts" ],
 }
