@@ -1,6 +1,7 @@
 import { UserType } from "../../../enum/User";
 import { BloodUnitStatus } from "../../blood-donation/enum/bloodUnit.enum";
 import BloodUnitRepository from "../../blood-donation/repositories/BloodUnitRepository";
+import DonationRepository from "../../blood-donation/repositories/DonationRepository";
 import DonorRepository from "../../blood-donation/repositories/DonorRepository";
 import UserService from "../../users/services/UserService";
 
@@ -16,6 +17,15 @@ type MenuItem = {
   path: string;
   icon?: string;
   children?: MenuItem[];
+};
+
+type RecentDonationRow = {
+  donationCode: string;
+  donorName: string;
+  bloodGroup: string;
+  units: number;
+  status: string;
+  donationDate: Date;
 };
 
 export default class DashboardService {
@@ -45,6 +55,19 @@ export default class DashboardService {
     ];
 
     return cards;
+  }
+
+  public static async getRecentDonations(limit = 8): Promise<RecentDonationRow[]> {
+    const donations = await DonationRepository.getRecentDonations(limit, 0);
+
+    return donations.map((item: any) => ({
+      donationCode: item.donationCode,
+      donorName: item?.donorId?.name || "Unknown Donor",
+      bloodGroup: item?.donorId?.bloodGroup || "—",
+      units: Array.isArray(item.bloodUnits) ? item.bloodUnits.length : 0,
+      status: item.status,
+      donationDate: item.donationDate,
+    }));
   }
 
   public static getMenuItems(): MenuItem[] {

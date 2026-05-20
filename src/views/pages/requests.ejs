@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head'); %>
+
+    <body>
+        <main class="hp-bg-color-dark-90 d-flex min-vh-100">
+            <%- include('../partials/sidebar'); %>
+
+                <div class="hp-main-layout">
+                    <%- include('../partials/top-navigation'); %>
+
+                        <div class="hp-main-layout-content">
+                            <div class="row mb-24">
+                                <div class="col-12">
+                                    <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Blood Requests</h1>
+                                    <%- include('../partials/breadcrumb', { breadcrumbs: breadcrumbs }) %>
+                                </div>
+                            </div>
+
+                            <div class="card border-0 shadow-sm mb-24">
+                                <div class="card-body p-24">
+                                    <h4 class="mb-16">Create Blood Request</h4>
+
+                                    <form id="bloodRequestForm" class="row g-16" hx-post="/api/requests"
+                                        hx-target="#requestResult" hx-swap="innerHTML">
+                                        <div class="col-12 col-md-6">
+                                            <label for="requesterNameInput" class="form-label">Requester Name</label>
+                                            <input id="requesterNameInput" type="text" class="form-control"
+                                                name="requesterName" placeholder="Dr. John Doe" required />
+                                        </div>
+
+                                        <div class="col-12 col-md-6">
+                                            <label for="requesterHospitalInput" class="form-label">Hospital /
+                                                Facility</label>
+                                            <input id="requesterHospitalInput" type="text" class="form-control"
+                                                name="requesterHospital" placeholder="City General Hospital" required />
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <label for="contactPhoneInput" class="form-label">Contact Phone</label>
+                                            <input id="contactPhoneInput" type="text" class="form-control"
+                                                name="contactPhone" placeholder="+233..." required />
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <label for="bloodGroupSelect" class="form-label">Blood Group</label>
+                                            <select id="bloodGroupSelect" class="form-select" name="bloodGroup"
+                                                required>
+                                                <option value="">Select blood group</option>
+                                                <% (bloodGroups || []).forEach(function(group) { %>
+                                                    <option value="<%= group %>">
+                                                        <%= group %>
+                                                    </option>
+                                                    <% }); %>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <label for="unitsInput" class="form-label">Units Needed</label>
+                                            <input id="unitsInput" type="number" min="1" step="1" class="form-control"
+                                                name="units" placeholder="2" required />
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <label for="urgencySelect" class="form-label">Urgency</label>
+                                            <select id="urgencySelect" class="form-select" name="urgency" required>
+                                                <option value="MEDIUM">Medium</option>
+                                                <option value="LOW">Low</option>
+                                                <option value="HIGH">High</option>
+                                                <option value="CRITICAL">Critical</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 col-md-4">
+                                            <label for="neededByInput" class="form-label">Needed By</label>
+                                            <input id="neededByInput" type="datetime-local" class="form-control"
+                                                name="neededBy" />
+                                        </div>
+
+                                        <div class="col-12">
+                                            <label for="notesInput" class="form-label">Notes</label>
+                                            <textarea id="notesInput" class="form-control" name="notes" rows="4"
+                                                placeholder="Patient details / context (optional)"></textarea>
+                                        </div>
+
+                                        <div class="col-12 d-flex gap-12">
+                                            <button type="submit" class="btn btn-primary">Submit Request</button>
+                                            <button type="reset" class="btn btn-outline-secondary">Clear</button>
+                                        </div>
+                                    </form>
+
+                                    <div id="requestResult" class="mt-16"></div>
+                                </div>
+                            </div>
+
+                            <div class="card border-0 shadow-sm">
+                                <div class="card-body p-24">
+                                    <h4 class="mb-16">Recent Blood Requests</h4>
+
+                                    <div class="table-responsive">
+                                        <table class="table table-striped align-middle mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th>Date</th>
+                                                    <th>Requester</th>
+                                                    <th>Facility</th>
+                                                    <th>Blood Group</th>
+                                                    <th>Units</th>
+                                                    <th>Urgency</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (recentRequests && recentRequests.length> 0) { %>
+                                                    <% recentRequests.forEach(function(item) { %>
+                                                        <tr>
+                                                            <td>
+                                                                <%= item.createdAt ? new
+                                                                    Date(item.createdAt).toLocaleString() : '—' %>
+                                                            </td>
+                                                            <td>
+                                                                <%= item.requesterName %>
+                                                            </td>
+                                                            <td>
+                                                                <%= item.requesterHospital %>
+                                                            </td>
+                                                            <td>
+                                                                <span class="badge bg-light text-dark border">
+                                                                    <%= item.bloodGroup %>
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <%= item.units %>
+                                                            </td>
+                                                            <td>
+                                                                <% if (item.urgency==='CRITICAL' ) { %>
+                                                                    <span class="badge bg-danger">CRITICAL</span>
+                                                                    <% } else if (item.urgency==='HIGH' ) { %>
+                                                                        <span
+                                                                            class="badge bg-warning text-dark">HIGH</span>
+                                                                        <% } else if (item.urgency==='MEDIUM' ) { %>
+                                                                            <span
+                                                                                class="badge bg-info text-dark">MEDIUM</span>
+                                                                            <% } else { %>
+                                                                                <span
+                                                                                    class="badge bg-secondary">LOW</span>
+                                                                                <% } %>
+                                                            </td>
+                                                            <td>
+                                                                <% if (item.status==='PENDING' ) { %>
+                                                                    <span
+                                                                        class="badge bg-warning text-dark">PENDING</span>
+                                                                    <% } else if (item.status==='APPROVED' ) { %>
+                                                                        <span class="badge bg-primary">APPROVED</span>
+                                                                        <% } else if (item.status==='FULFILLED' ) { %>
+                                                                            <span
+                                                                                class="badge bg-success">FULFILLED</span>
+                                                                            <% } else { %>
+                                                                                <span
+                                                                                    class="badge bg-danger">REJECTED</span>
+                                                                                <% } %>
+                                                            </td>
+                                                        </tr>
+                                                        <% }); %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="7" class="text-center py-24">No blood
+                                                                        requests yet.</td>
+                                                                </tr>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+        </main>
+
+        <script>
+            (function () {
+                document.body.addEventListener('htmx:afterRequest', function (event) {
+                    if (event.target && event.target.id === 'bloodRequestForm') {
+                        const xhr = event.detail && event.detail.xhr;
+                        const resultNode = document.getElementById('requestResult');
+                        if (!resultNode) return;
+
+                        if (xhr && xhr.status === 201) {
+                            resultNode.innerHTML = '<div class="alert alert-success mb-0">Blood request submitted successfully.</div>';
+                            return;
+                        }
+
+                        if (xhr && xhr.status >= 400) {
+                            try {
+                                const payload = JSON.parse(xhr.responseText || '{}');
+                                const message = payload && payload.message ? payload.message : 'Unable to submit request';
+                                resultNode.innerHTML = '<div class="alert alert-danger mb-0">' + message + '</div>';
+                            } catch (_error) {
+                                resultNode.innerHTML = '<div class="alert alert-danger mb-0">Unable to submit request.</div>';
+                            }
+                        }
+                    }
+                });
+            })();
+        </script>
+
+    </body>
+    <%- include('../partials/bottom'); %>
+
+</html>

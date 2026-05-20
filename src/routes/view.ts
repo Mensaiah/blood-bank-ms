@@ -8,6 +8,8 @@ import DonationService from "../modules/blood-donation/services/DonationService"
 import BloodUnitService from "../modules/blood-donation/services/BloodUnitService";
 import UserService from "../modules/users/services/UserService";
 import NotificationService from "../modules/notifications/services/NotificationService";
+import RequestService from "../modules/requests/services/RequestService";
+import DashboardService from "../modules/dashboard/services/DashboardService";
 import { IGetDonationsFilter } from "../modules/blood-donation/interfaces/IDonation";
 import { IGetBloodUnitsFilter } from "../modules/blood-donation/interfaces/IBloodUnit";
 import { BloodGroup } from "../modules/blood-donation/enum/donor.enum";
@@ -358,6 +360,23 @@ router.get("/notifications", UserMiddleware.authenticate, async (req: Request, r
   });
 });
 
+router.get("/requests", UserMiddleware.authenticate, async (_req: Request, res: Response) => {
+  const recentRequests = await RequestService.getRecentRequests(15);
+
+  return res.render("pages/requests", {
+    page: {
+      ...basePageData,
+      title: "Blood Requests | Blood Bank Management System",
+    },
+    bloodGroups: Object.values(BloodGroup),
+    recentRequests,
+    breadcrumbs: [
+      { label: "Home", href: "/" },
+      { label: "Requests" },
+    ],
+  });
+});
+
 
 router.get("/login", (req: Request, res: Response) => {
   res.render("pages/login", {
@@ -368,12 +387,19 @@ router.get("/login", (req: Request, res: Response) => {
   });
 });
 
-router.get("/", UserMiddleware.authenticate, (req: Request, res: Response) => {
+router.get("/", UserMiddleware.authenticate, async (req: Request, res: Response) => {
+  const [cards, recentDonations] = await Promise.all([
+    DashboardService.getCards(),
+    DashboardService.getRecentDonations(8),
+  ]);
+
   res.render("pages/index", {
     page: {
       ...basePageData,
       title: "Blood Bank Management System",
     },
+    cards,
+    recentDonations,
   });
 });
 

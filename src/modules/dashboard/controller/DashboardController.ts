@@ -22,4 +22,11 @@ export default class DashboardController {
 
     return StandardResponse.successResponse(res, "Menu items fetched", menuItems as any, 200);
   }
+
+  public static async getRecentDonations(req: Request, res: Response) {
+    const limit = Number(req.query.limit || 8);
+    const rows = await DashboardService.getRecentDonations(limit);
+
+    return StandardResponse.successResponse(res, "Recent donations fetched", rows as any, 200);
+  }
 }

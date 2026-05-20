@@ -7,76 +7,112 @@
       <%- include('../partials/sidebar'); %>
 
         <div class="hp-main-layout">
-           <%- include('../partials/top-navigation'); %> 
+          <%- include('../partials/top-navigation'); %>
 
             <div class="hp-main-layout-content">
-              <div class="row justify-content-center">
-                <div class="col-12">
-                  <div
-                    class=" py-32 py-sm-64 px-24 px-sm-48 px-md-80 position-relative overflow-hidden hp-page-content"
-                    style="border-radius: 32px;">
-                    <div class="row mb-32">
-                      <div class="col-12 col-md-8">
-                        <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Welcome</h1>
-                        <p class="hp-p1-body mb-0 hp-text-color-black-80 hp-text-color-dark-30">This page uses reusable
-                          vertical layout partials and form components from the templates.</p>
+              <div class="row mb-24">
+                <div class="col-12 d-flex align-items-center justify-content-between">
+                  <div>
+                    <h1 class="mb-8 hp-text-color-black-100 hp-text-color-dark-0">Dashboard Analytics</h1>
+                    <p class="hp-p1-body mb-0 hp-text-color-black-80 hp-text-color-dark-30">
+                      Real-time blood bank operations overview and recent donation activity.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row g-24 mb-24">
+                <% (cards || []).forEach(function(card, index) { %>
+                  <div class="col-12 col-sm-6 col-xl-3">
+                    <div class="card border-0 shadow-sm h-100">
+                      <div class="card-body p-20">
+                        <div class="small text-muted mb-8">
+                          <%= card.title %>
+                        </div>
+                        <h2 class="mb-0 fw-bold">
+                          <%= card.value %>
+                        </h2>
+                        <div class="mt-12">
+                          <% if (index===0) { %>
+                            <span class="badge bg-success">Inventory</span>
+                            <% } else if (index===1) { %>
+                              <span class="badge bg-primary">Donors</span>
+                              <% } else if (index===2) { %>
+                                <span class="badge bg-warning text-dark">Attention</span>
+                                <% } else { %>
+                                  <span class="badge bg-info text-dark">Partners</span>
+                                  <% } %>
+                        </div>
                       </div>
                     </div>
+                  </div>
+                  <% }); %>
+              </div>
 
-                    <div class="row g-32">
-                      <div class="col-12 col-lg-6">
-                        <div class="card hp-card-1 border-black-40 hp-border-color-dark-80">
-                          <div class="card-body">
-                            <h4 class="mb-24 hp-text-color-black-100 hp-text-color-dark-0">Quick Donor Form</h4>
-
-                            <form>
-                              <div class="mb-16">
-                                <label for="donorName" class="form-label">Donor Name</label>
-                                <input type="text" class="form-control" id="donorName" placeholder="Enter donor name">
-                              </div>
-
-                              <div class="mb-16">
-                                <label for="bloodGroup" class="form-label">Blood Group</label>
-                                <select class="form-select" id="bloodGroup">
-                                  <option value="">Select blood group</option>
-                                  <option>A+</option>
-                                  <option>A-</option>
-                                  <option>B+</option>
-                                  <option>B-</option>
-                                  <option>AB+</option>
-                                  <option>AB-</option>
-                                  <option>O+</option>
-                                  <option>O-</option>
-                                </select>
-                              </div>
-
-                              <button type="button" class="btn btn-primary w-100">Save</button>
-                            </form>
-                          </div>
-                        </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-body p-24">
+                      <div class="d-flex justify-content-between align-items-center mb-16">
+                        <h4 class="mb-0">Recent Donations</h4>
+                        <a href="/donations" class="btn btn-sm btn-outline-primary">View All</a>
                       </div>
 
-                      <div class="col-12 col-lg-6">
-                        <div class="card hp-card-1 border-black-40 hp-border-color-dark-80">
-                          <div class="card-body">
-                            <h4 class="mb-24 hp-text-color-black-100 hp-text-color-dark-0">Inventory Snapshot</h4>
-
-                            <div class="d-flex align-items-center justify-content-between mb-16">
-                              <span class="hp-p1-body">Available Units</span>
-                              <span class="badge bg-success">0</span>
-                            </div>
-
-                            <div class="d-flex align-items-center justify-content-between mb-16">
-                              <span class="hp-p1-body">Reserved Units</span>
-                              <span class="badge bg-warning text-dark">0</span>
-                            </div>
-
-                            <div class="d-flex align-items-center justify-content-between">
-                              <span class="hp-p1-body">Expired Units</span>
-                              <span class="badge bg-danger">0</span>
-                            </div>
-                          </div>
-                        </div>
+                      <div class="table-responsive">
+                        <table class="table table-striped align-middle mb-0">
+                          <thead>
+                            <tr>
+                              <th>Donation Code</th>
+                              <th>Donor</th>
+                              <th>Blood Group</th>
+                              <th>Units</th>
+                              <th>Status</th>
+                              <th>Date</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% if (recentDonations && recentDonations.length> 0) { %>
+                              <% recentDonations.forEach(function(row) { %>
+                                <tr>
+                                  <td><strong>
+                                      <%= row.donationCode %>
+                                    </strong></td>
+                                  <td>
+                                    <%= row.donorName %>
+                                  </td>
+                                  <td>
+                                    <span class="badge bg-light text-dark border">
+                                      <%= row.bloodGroup %>
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <%= row.units %>
+                                  </td>
+                                  <td>
+                                    <% if (row.status==='completed' ) { %>
+                                      <span class="badge bg-success">completed</span>
+                                      <% } else if (row.status==='scheduled' ) { %>
+                                        <span class="badge bg-warning text-dark">scheduled</span>
+                                        <% } else if (row.status==='deferred' ) { %>
+                                          <span class="badge bg-secondary">deferred</span>
+                                          <% } else { %>
+                                            <span class="badge bg-danger">
+                                              <%= row.status %>
+                                            </span>
+                                            <% } %>
+                                  </td>
+                                  <td>
+                                    <%= row.donationDate ? new Date(row.donationDate).toLocaleString() : '—' %>
+                                  </td>
+                                </tr>
+                                <% }); %>
+                                  <% } else { %>
+                                    <tr>
+                                      <td colspan="6" class="text-center py-24">No recent donations available.</td>
+                                    </tr>
+                                    <% } %>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
